@@ -1,7 +1,9 @@
 mod buffer;
+mod cache;
 mod texture;
 
 pub use buffer::*;
+pub use cache::*;
 pub use texture::*;
 
 use std::sync::Arc;
@@ -23,7 +25,7 @@ pub enum AnyTransientResource {
     ImportedTexture(Arc<TransientTexture>),
 }
 
-#[derive(Clone)]
+#[derive(Clone, Hash, PartialEq, Eq)]
 pub enum AnyTransientResourceDescriptor {
     Buffer(BufferInfo),
     Texture(TextureInfo),
