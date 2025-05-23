@@ -6,7 +6,18 @@ pub use buffer::*;
 pub use cache::*;
 pub use texture::*;
 
+use crate::RenderDevice;
 use std::sync::Arc;
+
+pub trait TransientResourceCreator {
+    fn create_resource(&self, desc: &AnyTransientResourceDescriptor) -> AnyTransientResource;
+}
+
+impl TransientResourceCreator for RenderDevice {
+    fn create_resource(&self, _desc: &AnyTransientResourceDescriptor) -> AnyTransientResource {
+        todo!()
+    }
+}
 
 #[derive(Clone)]
 pub enum ArcTransientResource {
