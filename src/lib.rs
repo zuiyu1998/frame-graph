@@ -1,8 +1,10 @@
 pub mod handle;
+pub mod resource;
 pub mod resource_node;
 pub mod transient_resource;
 
 pub use handle::*;
+pub use resource::*;
 pub use transient_resource::*;
 
 pub struct PassNode {}
