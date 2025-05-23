@@ -1,6 +1,11 @@
+pub mod handle;
+pub mod resource_node;
 pub mod transient_resource;
 
+pub use handle::*;
 pub use transient_resource::*;
+
+pub struct PassNode {}
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

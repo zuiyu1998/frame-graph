@@ -6,6 +6,7 @@ pub use texture::*;
 
 use std::sync::Arc;
 
+#[derive(Clone)]
 pub enum ArcTransientResource {
     Buffer(Arc<TransientBuffer>),
     Texture(Arc<TransientTexture>),
@@ -22,6 +23,7 @@ pub enum AnyTransientResource {
     ImportedTexture(Arc<TransientTexture>),
 }
 
+#[derive(Clone)]
 pub enum AnyTransientResourceDescriptor {
     Buffer(BufferInfo),
     Texture(TextureInfo),
