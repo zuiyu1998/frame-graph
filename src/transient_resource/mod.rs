@@ -1,6 +1,31 @@
-pub enum AnyTransientResource {}
+mod buffer;
+mod texture;
 
-pub enum AnyTransientResourceDescriptor {}
+pub use buffer::*;
+pub use texture::*;
+
+use std::sync::Arc;
+
+pub enum ArcTransientResource {
+    Buffer(Arc<TransientBuffer>),
+    Texture(Arc<TransientTexture>),
+}
+
+pub trait IntoArcTransientResource {
+    fn into_arc_transient_resource(self: Arc<Self>) -> ArcTransientResource;
+}
+
+pub enum AnyTransientResource {
+    OwnedBuffer(TransientBuffer),
+    ImportedBuffer(Arc<TransientBuffer>),
+    OwnedTexture(TransientTexture),
+    ImportedTexture(Arc<TransientTexture>),
+}
+
+pub enum AnyTransientResourceDescriptor {
+    Buffer(BufferInfo),
+    Texture(TextureInfo),
+}
 
 pub trait TransientResource: 'static {
     type Descriptor: TransientResourceDescriptor;
