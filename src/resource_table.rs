@@ -17,7 +17,7 @@ impl ResourceTable {
         resource_ref: &Ref<ResourceType, ViewType>,
     ) -> Option<&ResourceType> {
         self.resources
-            .get(&resource_ref.handle)
+            .get(&resource_ref.raw.handle)
             .map(|res| TransientResource::borrow_resource(res))
     }
 
