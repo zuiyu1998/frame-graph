@@ -17,7 +17,7 @@ impl ResourceTable {
         resource_ref: &Ref<ResourceType, ViewType>,
     ) -> Option<&ResourceType> {
         self.resources
-            .get(&resource_ref.raw.handle)
+            .get(&resource_ref.raw.index)
             .map(|res| TransientResource::borrow_resource(res))
     }
 
@@ -27,7 +27,7 @@ impl ResourceTable {
         device: &RenderDevice,
         transient_resource_cache: &mut TransientResourceCache,
     ) {
-        let handle = request.handle;
+        let index = request.index;
         let resource = match &request.resource {
             VirtualResource::Imported(resource) => match &resource {
                 ArcTransientResource::Texture(resource) => {
@@ -42,7 +42,7 @@ impl ResourceTable {
                 .unwrap_or_else(|| device.create_resource(desc)),
         };
 
-        self.resources.insert(handle, resource);
+        self.resources.insert(index, resource);
     }
 
     pub fn release_resource(
@@ -50,7 +50,7 @@ impl ResourceTable {
         release: &ResourceRelease,
         transient_resource_cache: &mut TransientResourceCache,
     ) {
-        if let Some(resource) = self.resources.remove(&release.handle) {
+        if let Some(resource) = self.resources.remove(&release.index) {
             match resource {
                 AnyTransientResource::OwnedBuffer(buffer) => {
                     transient_resource_cache.insert_resource(

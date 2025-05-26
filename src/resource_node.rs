@@ -68,12 +68,12 @@ impl<ResourceType: TransientResource> Clone for Handle<ResourceType> {
 
 impl<ResourceType: TransientResource> Handle<ResourceType> {
     pub fn new(
-        handle: TypeIndex<ResourceNode>,
+        index: TypeIndex<ResourceNode>,
         version: u32,
         desc: <ResourceType as TransientResource>::Descriptor,
     ) -> Self {
         Self {
-            raw: RawResourceHandle { handle, version },
+            raw: RawResourceHandle { index, version },
             desc,
             _marker: PhantomData,
         }
@@ -82,12 +82,12 @@ impl<ResourceType: TransientResource> Handle<ResourceType> {
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 pub struct RawResourceHandle {
-    pub handle: TypeIndex<ResourceNode>,
+    pub index: TypeIndex<ResourceNode>,
     pub version: u32,
 }
 
 pub struct ResourceNode {
-    pub handle: TypeIndex<ResourceNode>,
+    pub index: TypeIndex<ResourceNode>,
     pub name: String,
     pub first_use_pass: Option<TypeIndex<PassNode>>,
     pub last_user_pass: Option<TypeIndex<PassNode>>,
@@ -96,12 +96,12 @@ pub struct ResourceNode {
 }
 
 pub struct ResourceRequese {
-    pub handle: TypeIndex<ResourceNode>,
+    pub index: TypeIndex<ResourceNode>,
     pub resource: VirtualResource,
 }
 
 pub struct ResourceRelease {
-    pub handle: TypeIndex<ResourceNode>,
+    pub index: TypeIndex<ResourceNode>,
 }
 
 #[derive(Clone)]
@@ -111,10 +111,10 @@ pub enum VirtualResource {
 }
 
 impl ResourceNode {
-    pub fn new(name: &str, handle: TypeIndex<ResourceNode>, resource: VirtualResource) -> Self {
+    pub fn new(name: &str, index: TypeIndex<ResourceNode>, resource: VirtualResource) -> Self {
         ResourceNode {
             name: name.to_string(),
-            handle,
+            index,
             version: 0,
             first_use_pass: None,
             last_user_pass: None,
@@ -126,14 +126,14 @@ impl ResourceNode {
 impl ResourceNode {
     pub fn request(&self) -> ResourceRequese {
         ResourceRequese {
-            handle: self.handle,
+            index: self.index,
             resource: self.resource.clone(),
         }
     }
 
     pub fn release(&self) -> ResourceRelease {
         ResourceRelease {
-            handle: self.handle,
+            index: self.index,
         }
     }
 

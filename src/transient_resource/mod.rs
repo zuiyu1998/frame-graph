@@ -1,10 +1,12 @@
 mod buffer;
 mod cache;
 mod texture;
+mod table;
 
 pub use buffer::*;
 pub use cache::*;
 pub use texture::*;
+pub use table::*;
 
 use crate::RenderDevice;
 use std::sync::Arc;
