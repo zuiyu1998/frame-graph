@@ -3,12 +3,12 @@ use std::collections::HashMap;
 use crate::{
     AnyTransientResource, ArcTransientResource, Ref, RenderDevice, ResourceNode, ResourceRelease,
     ResourceRequese, ResourceView, TransientResource, TransientResourceCache,
-    TransientResourceCreator, TypeHandle, VirtualResource,
+    TransientResourceCreator, TypeIndex, VirtualResource,
 };
 
 #[derive(Default)]
 pub struct ResourceTable {
-    resources: HashMap<TypeHandle<ResourceNode>, AnyTransientResource>,
+    resources: HashMap<TypeIndex<ResourceNode>, AnyTransientResource>,
 }
 
 impl ResourceTable {
