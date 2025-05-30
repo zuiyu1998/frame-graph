@@ -5,14 +5,14 @@ use crate::{
 };
 
 pub struct Ref<ResourceType: TransientResource, VieType> {
-    pub raw: RawResourceHandle,
+    pub raw: GraphRawResourceHandle,
     pub desc: <ResourceType as TransientResource>::Descriptor,
     _marker: PhantomData<(ResourceType, VieType)>,
 }
 
 impl<ResourceType: TransientResource, VieType> Ref<ResourceType, VieType> {
     pub fn new(
-        raw: RawResourceHandle,
+        raw: GraphRawResourceHandle,
         desc: <ResourceType as TransientResource>::Descriptor,
     ) -> Self {
         Self {
@@ -44,6 +44,7 @@ impl<ResourceType: TransientResource, VieType> Eq for Ref<ResourceType, VieType>
 pub trait ResourceView {}
 
 pub struct ResourceRead;
+
 pub struct ResourceWrite;
 
 impl ResourceView for ResourceRead {}
@@ -51,7 +52,7 @@ impl ResourceView for ResourceRead {}
 impl ResourceView for ResourceWrite {}
 
 pub struct Handle<ResourceType: TransientResource> {
-    pub raw: RawResourceHandle,
+    pub raw: GraphRawResourceHandle,
     pub desc: <ResourceType as TransientResource>::Descriptor,
     _marker: PhantomData<ResourceType>,
 }
@@ -73,7 +74,7 @@ impl<ResourceType: TransientResource> Handle<ResourceType> {
         desc: <ResourceType as TransientResource>::Descriptor,
     ) -> Self {
         Self {
-            raw: RawResourceHandle { index, version },
+            raw: GraphRawResourceHandle { index, version },
             desc,
             _marker: PhantomData,
         }
@@ -81,7 +82,7 @@ impl<ResourceType: TransientResource> Handle<ResourceType> {
 }
 
 #[derive(PartialEq, Eq, Hash, Clone)]
-pub struct RawResourceHandle {
+pub struct GraphRawResourceHandle {
     pub index: TypeIndex<ResourceNode>,
     pub version: u32,
 }
@@ -132,9 +133,7 @@ impl ResourceNode {
     }
 
     pub fn release(&self) -> ResourceRelease {
-        ResourceRelease {
-            index: self.index,
-        }
+        ResourceRelease { index: self.index }
     }
 
     pub fn version(&self) -> u32 {
