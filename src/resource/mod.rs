@@ -1,3 +1,7 @@
+pub mod pipeline;
+
+pub use pipeline::*;
+
 #[derive(Clone)]
 pub struct RenderDevice {
     device: wgpu::Device,
