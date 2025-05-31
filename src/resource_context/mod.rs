@@ -1,3 +1,15 @@
+pub mod compute_pass_context;
+pub mod encoder;
+pub mod encoder_pass_context;
+pub mod parameter;
+pub mod render_pass_context;
+
+pub use compute_pass_context::*;
+pub use encoder::*;
+pub use encoder_pass_context::*;
+pub use parameter::*;
+pub use render_pass_context::*;
+
 use crate::{
     CachedComputePipelineId, CachedRenderPipelineId, ComputePipeline, PipelineCache,
     PipelineStorage, Ref, RenderDevice, RenderPipeline, ResourceTable, ResourceView,
@@ -5,8 +17,8 @@ use crate::{
 };
 
 pub struct RenderContext<'a> {
-    pub(crate) render_device: &'a RenderDevice,
-    pub(crate) transient_resource_cache: &'a mut TransientResourceCache,
+    pub render_device: &'a RenderDevice,
+    pub transient_resource_cache: &'a mut TransientResourceCache,
     pub(crate) resource_table: ResourceTable,
     command_buffer_queue: Vec<wgpu::CommandBuffer>,
     pipeline_cache: PipelineCache,
@@ -46,10 +58,6 @@ impl<'a> RenderContext<'a> {
         self.pipeline_cache
             .get_render_pipeline(id)
             .expect("render pipeline mut have")
-    }
-
-    pub fn device(&self) -> &RenderDevice {
-        self.render_device
     }
 
     pub fn add_command_buffer(&mut self, command_buffer: wgpu::CommandBuffer) {

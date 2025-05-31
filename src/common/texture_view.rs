@@ -73,7 +73,7 @@ impl<ViewType: ResourceView> Clone for TextureView<ViewType> {
 impl<ViewType: ResourceView> ResourceBinding for TextureView<ViewType> {
     type Resource = wgpu::TextureView;
 
-    fn make_resource<'a>(&self, render_context: &RenderContext<'a>) -> Self::Resource {
+    fn make_resource(&self, render_context: &RenderContext<'_>) -> Self::Resource {
         render_context
             .get_resource(&self.texture)
             .resource

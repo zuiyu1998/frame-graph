@@ -26,18 +26,14 @@ impl Pipeline {
     pub fn get_render_pipeline(&self) -> Option<&RenderPipeline> {
         match self {
             Pipeline::RenderPipeline(res) => Some(res),
-            _ => {
-                None
-            }
+            _ => None,
         }
     }
 
     pub fn get_compute_pipeline(&self) -> Option<&ComputePipeline> {
         match self {
             Pipeline::ComputePipeline(res) => Some(res),
-            _ => {
-                None
-            }
+            _ => None,
         }
     }
 }

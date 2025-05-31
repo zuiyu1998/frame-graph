@@ -29,7 +29,7 @@ impl ColorAttachmentOwned {
 impl ResourceBinding for ColorAttachment {
     type Resource = ColorAttachmentOwned;
 
-    fn make_resource<'a>(&self, render_context: &RenderContext<'a>) -> Self::Resource {
+    fn make_resource(&self, render_context: &RenderContext<'_>) -> Self::Resource {
         let view = self.view.make_resource(render_context);
 
         if let Some(resolve_target) = &self.resolve_target {
