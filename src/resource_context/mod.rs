@@ -4,12 +4,6 @@ use crate::{
     TransientResource, TransientResourceCache,
 };
 
-pub trait ResourceBinding {
-    type Resource;
-
-    fn make_resource<'a>(&self, render_context: &RenderContext<'a>) -> Self::Resource;
-}
-
 pub struct RenderContext<'a> {
     pub(crate) render_device: &'a RenderDevice,
     pub(crate) transient_resource_cache: &'a mut TransientResourceCache,
