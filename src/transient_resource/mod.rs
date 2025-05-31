@@ -36,6 +36,30 @@ pub enum AnyTransientResource {
     ImportedTexture(Arc<TransientTexture>),
 }
 
+impl From<TransientBuffer> for AnyTransientResource {
+    fn from(value: TransientBuffer) -> Self {
+        AnyTransientResource::OwnedBuffer(value)
+    }
+}
+
+impl From<Arc<TransientBuffer>> for AnyTransientResource {
+    fn from(value: Arc<TransientBuffer>) -> Self {
+        AnyTransientResource::ImportedBuffer(value)
+    }
+}
+
+impl From<TransientTexture> for AnyTransientResource {
+    fn from(value: TransientTexture) -> Self {
+        AnyTransientResource::OwnedTexture(value)
+    }
+}
+
+impl From<Arc<TransientTexture>> for AnyTransientResource {
+    fn from(value: Arc<TransientTexture>) -> Self {
+        AnyTransientResource::ImportedTexture(value)
+    }
+}
+
 #[derive(Clone, Hash, PartialEq, Eq)]
 pub enum AnyTransientResourceDescriptor {
     Buffer(BufferInfo),

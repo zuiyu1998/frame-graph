@@ -3,12 +3,14 @@ pub mod resource;
 pub mod resource_node;
 pub mod transient_resource;
 pub mod resource_context;
+pub mod resource_table;
 
 pub use index::*;
 pub use resource::*;
 pub use resource_node::*;
 pub use transient_resource::*;
 pub use resource_context::*;
+pub use resource_table::*;
 
 pub struct PassNode {}
 

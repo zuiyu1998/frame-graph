@@ -9,7 +9,7 @@ pub struct CachedRenderPipelineId(CachedPipelineId);
 pub struct CachedComputePipelineId(CachedPipelineId);
 
 pub trait PipelineCacheTrait {
-    fn get_render_pipiline(&self, id: CachedRenderPipelineId) -> Option<&RenderPipeline>;
+    fn get_render_pipeline(&self, id: CachedRenderPipelineId) -> Option<&RenderPipeline>;
 
-    fn get_compute_pipiline(&self, id: CachedRenderPipelineId) -> Option<&ComputePipeline>;
+    fn get_compute_pipeline(&self, id: CachedComputePipelineId) -> Option<&ComputePipeline>;
 }
