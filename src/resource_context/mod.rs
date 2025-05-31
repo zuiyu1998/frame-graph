@@ -1,28 +1,34 @@
 use crate::{
-    CachedComputePipelineId, CachedRenderPipelineId, ComputePipeline, PipelineCacheTrait, Ref,
-    RenderDevice, RenderPipeline, ResourceTable, ResourceView, TransientResource,
-    TransientResourceCache,
+    CachedComputePipelineId, CachedRenderPipelineId, ComputePipeline, PipelineCache,
+    PipelineStorage, Ref, RenderDevice, RenderPipeline, ResourceTable, ResourceView,
+    TransientResource, TransientResourceCache,
 };
 
-pub struct RenderContext<'a, PipelineCache> {
+pub trait ResourceBinding {
+    type Resource;
+
+    fn make_resource<'a>(&self, render_context: &RenderContext<'a>) -> Self::Resource;
+}
+
+pub struct RenderContext<'a> {
     pub(crate) render_device: &'a RenderDevice,
     pub(crate) transient_resource_cache: &'a mut TransientResourceCache,
     pub(crate) resource_table: ResourceTable,
     command_buffer_queue: Vec<wgpu::CommandBuffer>,
-    pipeline_cache: &'a PipelineCache,
+    pipeline_cache: PipelineCache,
 }
 
-impl<'a, PipelineCache: PipelineCacheTrait> RenderContext<'a, PipelineCache> {
-    pub fn new(
+impl<'a> RenderContext<'a> {
+    pub fn new<T: PipelineStorage>(
         render_device: &'a RenderDevice,
         transient_resource_cache: &'a mut TransientResourceCache,
-        pipeline_cache: &'a PipelineCache,
+        pipeline_storage: &'a T,
     ) -> Self {
         Self {
             render_device,
             transient_resource_cache,
             command_buffer_queue: vec![],
-            pipeline_cache,
+            pipeline_cache: pipeline_storage.get_pipeline_cache(),
             resource_table: ResourceTable::default(),
         }
     }
