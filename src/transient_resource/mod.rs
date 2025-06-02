@@ -25,7 +25,20 @@ pub enum ArcTransientResource {
     Texture(Arc<TransientTexture>),
 }
 
-pub trait IntoArcTransientResource {
+impl ArcTransientResource {
+    pub fn get_desc(&self) -> AnyTransientResourceDescriptor {
+        match self {
+            ArcTransientResource::Buffer(res) => {
+                AnyTransientResourceDescriptor::Buffer(res.desc.clone())
+            }
+            ArcTransientResource::Texture(res) => {
+                AnyTransientResourceDescriptor::Texture(res.desc.clone())
+            }
+        }
+    }
+}
+
+pub trait IntoArcTransientResource: TransientResource {
     fn into_arc_transient_resource(self: Arc<Self>) -> ArcTransientResource;
 }
 
@@ -78,6 +91,8 @@ pub trait TransientResourceDescriptor:
     'static + Clone + Into<AnyTransientResourceDescriptor>
 {
     type Resource: TransientResource;
+
+    fn borrow_resource_descriptor(res: &AnyTransientResourceDescriptor) -> &Self;
 }
 
 pub trait TypeEquals {

@@ -54,4 +54,13 @@ impl From<TextureInfo> for AnyTransientResourceDescriptor {
 
 impl TransientResourceDescriptor for TextureInfo {
     type Resource = TransientTexture;
+
+    fn borrow_resource_descriptor(res: &AnyTransientResourceDescriptor) -> &Self {
+        match res {
+            AnyTransientResourceDescriptor::Texture(res) => res,
+            _ => {
+                unimplemented!()
+            }
+        }
+    }
 }

@@ -1,7 +1,8 @@
 use core::marker::PhantomData;
 
 use crate::{
-    AnyTransientResourceDescriptor, ArcTransientResource, PassNode, TransientResource, TypeIndex,
+    AnyTransientResourceDescriptor, ArcTransientResource, IndexHandle, PassNode, TransientResource,
+    TransientResourceDescriptor,
 };
 
 pub struct Ref<ResourceType: TransientResource, VieType> {
@@ -69,7 +70,7 @@ impl<ResourceType: TransientResource> Clone for Handle<ResourceType> {
 
 impl<ResourceType: TransientResource> Handle<ResourceType> {
     pub fn new(
-        index: TypeIndex<ResourceNode>,
+        index: IndexHandle<ResourceNode>,
         version: u32,
         desc: <ResourceType as TransientResource>::Descriptor,
     ) -> Self {
@@ -83,26 +84,26 @@ impl<ResourceType: TransientResource> Handle<ResourceType> {
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 pub struct GraphRawResourceHandle {
-    pub index: TypeIndex<ResourceNode>,
+    pub index: IndexHandle<ResourceNode>,
     pub version: u32,
 }
 
 pub struct ResourceNode {
-    pub index: TypeIndex<ResourceNode>,
+    pub index: IndexHandle<ResourceNode>,
     pub name: String,
-    pub first_use_pass: Option<TypeIndex<PassNode>>,
-    pub last_user_pass: Option<TypeIndex<PassNode>>,
+    pub first_use_pass: Option<IndexHandle<PassNode>>,
+    pub last_user_pass: Option<IndexHandle<PassNode>>,
     version: u32,
     pub resource: VirtualResource,
 }
 
 pub struct ResourceRequese {
-    pub index: TypeIndex<ResourceNode>,
+    pub index: IndexHandle<ResourceNode>,
     pub resource: VirtualResource,
 }
 
 pub struct ResourceRelease {
-    pub index: TypeIndex<ResourceNode>,
+    pub index: IndexHandle<ResourceNode>,
 }
 
 #[derive(Clone)]
@@ -111,8 +112,20 @@ pub enum VirtualResource {
     Imported(ArcTransientResource),
 }
 
+impl VirtualResource {
+    pub fn get_desc<ResourceType: TransientResource>(&self) -> ResourceType::Descriptor {
+        let desc = match self {
+            VirtualResource::Imported(resource) => resource.get_desc(),
+            VirtualResource::Setuped(desc) => desc.clone(),
+        };
+
+        <ResourceType::Descriptor as TransientResourceDescriptor>::borrow_resource_descriptor(&desc)
+            .clone()
+    }
+}
+
 impl ResourceNode {
-    pub fn new(name: &str, index: TypeIndex<ResourceNode>, resource: VirtualResource) -> Self {
+    pub fn new(name: &str, index: IndexHandle<ResourceNode>, resource: VirtualResource) -> Self {
         ResourceNode {
             name: name.to_string(),
             index,
@@ -132,6 +145,15 @@ impl ResourceNode {
         }
     }
 
+    pub fn get_handle<ResourceType: TransientResource>(&self) -> Handle<ResourceType> {
+        let desc = self.get_desc::<ResourceType>().clone();
+        Handle::new(self.index, self.version, desc)
+    }
+
+    pub fn get_desc<ResourceType: TransientResource>(&self) -> ResourceType::Descriptor {
+        self.resource.get_desc::<ResourceType>()
+    }
+
     pub fn release(&self) -> ResourceRelease {
         ResourceRelease { index: self.index }
     }
@@ -144,7 +166,7 @@ impl ResourceNode {
         self.version += 1;
     }
 
-    pub fn update_lifetime(&mut self, handle: TypeIndex<PassNode>) {
+    pub fn update_lifetime(&mut self, handle: IndexHandle<PassNode>) {
         if self.first_use_pass.is_none() {
             self.first_use_pass = Some(handle);
         }

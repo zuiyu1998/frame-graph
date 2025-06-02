@@ -4,12 +4,12 @@ use core::{
 };
 use std::any::{Any, TypeId};
 
-pub struct TypeIndex<T> {
+pub struct IndexHandle<T> {
     pub index: usize,
     _marker: PhantomData<T>,
 }
 
-impl<T: Any> Hash for TypeIndex<T> {
+impl<T: Any> Hash for IndexHandle<T> {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.index.hash(state);
         let id = TypeId::of::<T>();
@@ -17,25 +17,25 @@ impl<T: Any> Hash for TypeIndex<T> {
     }
 }
 
-impl<T> Eq for TypeIndex<T> {}
+impl<T> Eq for IndexHandle<T> {}
 
-impl<T> PartialEq for TypeIndex<T> {
+impl<T> PartialEq for IndexHandle<T> {
     fn eq(&self, other: &Self) -> bool {
         self.index == other.index
     }
 }
 
-impl<T> Copy for TypeIndex<T> {}
+impl<T> Copy for IndexHandle<T> {}
 
-impl<T> Clone for TypeIndex<T> {
+impl<T> Clone for IndexHandle<T> {
     fn clone(&self) -> Self {
         *self
     }
 }
 
-impl<T> TypeIndex<T> {
+impl<T> IndexHandle<T> {
     pub fn new(index: usize) -> Self {
-        TypeIndex {
+        IndexHandle {
             index,
             _marker: PhantomData,
         }

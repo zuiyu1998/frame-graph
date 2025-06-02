@@ -1,14 +1,14 @@
 use std::collections::HashMap;
 
 use crate::{
-    AnyTransientResource, ArcTransientResource, Ref, RenderDevice, ResourceNode, ResourceRelease,
-    ResourceRequese, ResourceView, TransientResource, TransientResourceCache,
-    TransientResourceCreator, TypeIndex, VirtualResource,
+    AnyTransientResource, ArcTransientResource, IndexHandle, Ref, RenderDevice, ResourceNode,
+    ResourceRelease, ResourceRequese, ResourceView, TransientResource, TransientResourceCache,
+    TransientResourceCreator, VirtualResource,
 };
 
 #[derive(Default)]
 pub struct ResourceTable {
-    resources: HashMap<TypeIndex<ResourceNode>, AnyTransientResource>,
+    resources: HashMap<IndexHandle<ResourceNode>, AnyTransientResource>,
 }
 
 impl ResourceTable {

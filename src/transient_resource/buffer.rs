@@ -52,4 +52,13 @@ impl From<BufferInfo> for AnyTransientResourceDescriptor {
 
 impl TransientResourceDescriptor for BufferInfo {
     type Resource = TransientBuffer;
+
+    fn borrow_resource_descriptor(res: &AnyTransientResourceDescriptor) -> &Self {
+        match res {
+            AnyTransientResourceDescriptor::Buffer(res) => res,
+            _ => {
+                unimplemented!()
+            }
+        }
+    }
 }
