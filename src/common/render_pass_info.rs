@@ -15,14 +15,14 @@ pub struct RenderPassInfo {
     pub raw_color_attachments: Vec<Option<ColorAttachmentOwned>>,
 }
 
-pub struct RenderPassInfoOwned {
+pub struct RenderPassOwned {
     pub label: Option<Cow<'static, str>>,
     pub color_attachments: Vec<Option<ColorAttachmentOwned>>,
     pub depth_stencil_attachment: Option<DepthStencilAttachmentOwned>,
 }
 
 impl ResourceBinding for RenderPassInfo {
-    type Resource = RenderPassInfoOwned;
+    type Resource = RenderPassOwned;
 
     fn make_resource(&self, render_context: &RenderContext<'_>) -> Self::Resource {
         let mut color_attachments = self.raw_color_attachments.clone();
@@ -40,26 +40,26 @@ impl ResourceBinding for RenderPassInfo {
             }
         }
 
-        let mut depth_stencil_attachment = None;
+        let mut depth_stencil_attachment_owned = None;
 
-        if let Some(depth_stencil_attachment_blue_print) = &self.depth_stencil_attachment {
-            depth_stencil_attachment =
-                Some(depth_stencil_attachment_blue_print.make_resource(render_context));
+        if let Some(depth_stencil_attachment) = &self.depth_stencil_attachment {
+            depth_stencil_attachment_owned =
+                Some(depth_stencil_attachment.make_resource(render_context));
         }
 
-        RenderPassInfoOwned {
+        RenderPassOwned {
             label: self.label.clone(),
             color_attachments,
-            depth_stencil_attachment,
+            depth_stencil_attachment: depth_stencil_attachment_owned,
         }
     }
 }
 
-impl RenderPassInfoOwned {
-    pub fn create_render_pass<'a>(
+impl RenderPassOwned {
+    pub fn create_render_pass(
         &self,
-        command_encoder: &'a mut wgpu::CommandEncoder,
-    ) -> wgpu::RenderPass<'a> {
+        command_encoder: &mut wgpu::CommandEncoder,
+    ) -> wgpu::RenderPass<'static> {
         let depth_stencil_attachment =
             self.depth_stencil_attachment
                 .as_ref()
@@ -82,6 +82,6 @@ impl RenderPassInfoOwned {
             ..Default::default()
         });
 
-        render_pass
+        render_pass.forget_lifetime()
     }
 }

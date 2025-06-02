@@ -1,3 +1,9 @@
+pub mod render_pass;
+pub mod render_pass_builder;
+
+pub use render_pass::*;
+pub use render_pass_builder::*;
+
 use std::{
     borrow::Cow,
     mem::take,

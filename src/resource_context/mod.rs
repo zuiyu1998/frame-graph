@@ -10,10 +10,12 @@ pub use encoder_pass_context::*;
 pub use parameter::*;
 pub use render_pass_context::*;
 
+use wgpu::CommandEncoder;
+
 use crate::{
     CachedComputePipelineId, CachedRenderPipelineId, ComputePipeline, PipelineCache,
-    PipelineStorage, Ref, RenderDevice, RenderPipeline, ResourceTable, ResourceView,
-    TransientResource, TransientResourceCache,
+    PipelineStorage, Ref, RenderDevice, RenderPassOwned, RenderPipeline, ResourceTable,
+    ResourceView, TransientResource, TransientResourceCache,
 };
 
 pub struct RenderContext<'a> {
@@ -37,6 +39,16 @@ impl<'a> RenderContext<'a> {
             pipeline_cache: pipeline_storage.get_pipeline_cache(),
             resource_table: ResourceTable::default(),
         }
+    }
+
+    pub fn begin_render_pass<'b>(
+        &'b mut self,
+        command_encoder: &'b mut CommandEncoder,
+        render_pass_owned: &RenderPassOwned,
+    ) -> RenderPassContext<'a, 'b> {
+        let render_pass = render_pass_owned.create_render_pass(command_encoder);
+
+        RenderPassContext::new(command_encoder, render_pass, self)
     }
 
     pub fn get_resource<ResourceType: TransientResource, View: ResourceView>(
