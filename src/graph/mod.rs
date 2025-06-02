@@ -6,6 +6,12 @@ use super::{
     VirtualResource,
 };
 
+pub trait ResourceMaterial {
+    type ResourceType: TransientResource;
+
+    fn imported(&self, frame_graph: &mut FrameGraph) -> Handle<Self::ResourceType>;
+}
+
 pub struct CompiledFrameGraph {
     device_passes: Vec<DevicePass>,
 }
