@@ -1,8 +1,65 @@
-use std::borrow::Cow;
+use std::{
+    borrow::Cow,
+    mem::take,
+    ops::{Deref, DerefMut},
+};
 
 use wgpu::CommandEncoder;
 
-use crate::{EncoderCommand, RenderContext};
+use crate::{EncoderCommand, EncoderCommandBuilder, PassNodeBuilder, RenderContext};
+
+pub struct PassBuilder<'a> {
+    pass_node_builder: PassNodeBuilder<'a>,
+    pass: Pass,
+}
+
+impl<'a> Deref for PassBuilder<'a> {
+    type Target = PassNodeBuilder<'a>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.pass_node_builder
+    }
+}
+
+impl DerefMut for PassBuilder<'_> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.pass_node_builder
+    }
+}
+
+impl Drop for PassBuilder<'_> {
+    fn drop(&mut self) {
+        let pass = take(&mut self.pass);
+        self.pass_node_builder.set_pass(pass);
+    }
+}
+
+impl EncoderCommandBuilder for PassBuilder<'_> {
+    fn add_begin_encoder_command(&mut self, value: EncoderCommand) -> &mut Self {
+        self.pass.begin_encoder_commands.push(value);
+
+        self
+    }
+
+    fn add_end_encoder_command(&mut self, value: EncoderCommand) -> &mut Self {
+        self.pass.end_encoder_commands.push(value);
+
+        self
+    }
+}
+
+impl<'a> PassBuilder<'a> {
+    pub fn new(pass_node_builder: PassNodeBuilder<'a>) -> Self {
+        PassBuilder {
+            pass_node_builder,
+            pass: Pass::default(),
+        }
+    }
+
+    pub fn add_executor<T: EncoderExecutor>(&mut self, executor: T) {
+        self.pass.executors.push(Box::new(executor));
+    }
+}
 
 #[derive(Default)]
 pub struct Pass {

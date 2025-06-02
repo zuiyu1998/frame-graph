@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use crate::{PassBuilder, PassNodeBuilder};
+
 use super::{
     DevicePass, Handle, IndexHandle, IntoArcTransientResource, PassNode, RenderContext,
     ResourceBoard, ResourceNode, TransientResource, TransientResourceDescriptor, TypeEquals,
@@ -120,6 +122,10 @@ impl FrameGraph {
     pub fn insert(&mut self, key: &str, index: IndexHandle<ResourceNode>) {
         let key = key.into();
         self.resource_board.insert(key, index);
+    }
+
+    pub fn create_pass_builder<'a>(&'a mut self, name: &str) -> PassBuilder<'a> {
+        PassBuilder::new(PassNodeBuilder::new(name, self))
     }
 
     pub fn get<ResourceType: TransientResource>(&self, key: &str) -> Option<Handle<ResourceType>> {
