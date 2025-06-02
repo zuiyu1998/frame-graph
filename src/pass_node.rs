@@ -1,14 +1,6 @@
-use crate::RenderContext;
+use crate::Pass;
 
 use super::{GraphRawResourceHandle, IndexHandle, ResourceNode};
-
-pub struct Pass {}
-
-impl Pass {
-    pub fn render(&self, _render_context: &mut RenderContext) {
-        todo!()
-    }
-}
 
 pub struct PassNode {
     pub name: String,

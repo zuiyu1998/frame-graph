@@ -314,7 +314,7 @@ pub struct PushDebugGroupParameter {
     pub label: String,
 }
 impl ErasedEncoderCommand for PushDebugGroupParameter {
-    fn draw(&self, command_encoder: &mut wgpu::CommandEncoder) {
+    fn apply(&self, command_encoder: &mut wgpu::CommandEncoder) {
         command_encoder.push_debug_group(&self.label);
     }
 }
@@ -334,7 +334,7 @@ impl ErasedRenderPassCommand for PushDebugGroupParameter {
 pub struct PopDebugGroupParameter;
 
 impl ErasedEncoderCommand for PopDebugGroupParameter {
-    fn draw(&self, command_encoder: &mut wgpu::CommandEncoder) {
+    fn apply(&self, command_encoder: &mut wgpu::CommandEncoder) {
         command_encoder.pop_debug_group();
     }
 }

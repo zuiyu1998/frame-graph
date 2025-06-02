@@ -22,11 +22,11 @@ impl EncoderCommand {
         Self(Box::new(value))
     }
 
-    pub fn draw(&self, command_encoder: &mut wgpu::CommandEncoder) {
-        self.0.draw(command_encoder)
+    pub fn apply(&self, command_encoder: &mut wgpu::CommandEncoder) {
+        self.0.apply(command_encoder)
     }
 }
 
 pub trait ErasedEncoderCommand: Sync + Send + 'static {
-    fn draw(&self, command_encoder: &mut wgpu::CommandEncoder);
+    fn apply(&self, command_encoder: &mut wgpu::CommandEncoder);
 }
