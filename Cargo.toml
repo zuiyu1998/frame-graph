@@ -4,4 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+encase = { version = "0.10" }
 wgpu = { version = "24" }
+variadics_please = "1.1"
