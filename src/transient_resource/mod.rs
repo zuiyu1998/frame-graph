@@ -14,8 +14,25 @@ pub trait TransientResourceCreator {
 }
 
 impl TransientResourceCreator for RenderDevice {
-    fn create_resource(&self, _desc: &AnyTransientResourceDescriptor) -> AnyTransientResource {
-        todo!()
+    fn create_resource(&self, desc: &AnyTransientResourceDescriptor) -> AnyTransientResource {
+        match desc {
+            AnyTransientResourceDescriptor::Texture(desc) => {
+                let resource = self.wgpu_device().create_texture(&desc.get_texture_desc());
+                TransientTexture {
+                    resource,
+                    desc: desc.clone(),
+                }
+                .into()
+            }
+            AnyTransientResourceDescriptor::Buffer(desc) => {
+                let resource = self.wgpu_device().create_buffer(&&desc.get_buffer_desc());
+                TransientBuffer {
+                    resource,
+                    desc: desc.clone(),
+                }
+                .into()
+            }
+        }
     }
 }
 
