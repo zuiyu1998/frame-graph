@@ -1,8 +1,11 @@
+pub mod bind_group_layout;
 pub mod pipeline;
 pub mod pipeline_cache;
 
+pub use bind_group_layout::*;
 pub use pipeline::*;
 pub use pipeline_cache::*;
+
 use wgpu::BindGroupLayoutEntry;
 
 #[derive(Clone)]
@@ -13,17 +16,6 @@ pub struct Sampler {
 impl Sampler {
     pub fn wgpu_sampler(&self) -> &wgpu::Sampler {
         &self.sampler
-    }
-}
-
-#[derive(Clone)]
-pub struct BindGroupLayout {
-    layout: wgpu::BindGroupLayout,
-}
-
-impl BindGroupLayout {
-    pub fn wgpu_layout(&self) -> &wgpu::BindGroupLayout {
-        &self.layout
     }
 }
 
