@@ -55,10 +55,22 @@ pub struct RenderQueue(pub Arc<wgpu::Queue>);
 #[derive(Clone)]
 pub struct RenderAdapter(pub Arc<wgpu::Adapter>);
 
+#[derive(Clone)]
+pub struct RenderInstance(pub Arc<wgpu::Instance>);
+
+#[derive(Clone)]
+pub struct RenderAdapterInfo(pub Arc<wgpu::AdapterInfo>);
+
 pub async fn initialize_resources(
-    instance: &Instance,
+    instance: Instance,
     request_adapter_options: &RequestAdapterOptions<'_, '_>,
-) -> (RenderDevice, RenderQueue, RenderAdapter) {
+) -> (
+    RenderDevice,
+    RenderQueue,
+    RenderAdapter,
+    RenderAdapterInfo,
+    RenderInstance,
+) {
     let adapter = instance
         .request_adapter(request_adapter_options)
         .await
@@ -81,5 +93,7 @@ pub async fn initialize_resources(
         RenderDevice { device },
         RenderQueue(Arc::new(queue)),
         RenderAdapter(Arc::new(adapter)),
+        RenderAdapterInfo(Arc::new(adapter_info)),
+        RenderInstance(Arc::new(instance)),
     )
 }
