@@ -52,6 +52,7 @@ impl RenderDevice {
 #[derive(Clone)]
 pub struct RenderQueue(pub Arc<wgpu::Queue>);
 
+#[derive(Clone)]
 pub struct RenderAdapter(pub Arc<wgpu::Adapter>);
 
 pub async fn initialize_resources(
