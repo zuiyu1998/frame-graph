@@ -2,11 +2,14 @@ pub mod bind_group_layout;
 pub mod pipeline;
 pub mod pipeline_cache;
 
+use std::sync::Arc;
+
 pub use bind_group_layout::*;
 pub use pipeline::*;
 pub use pipeline_cache::*;
 
-use wgpu::BindGroupLayoutEntry;
+use tracing::info;
+use wgpu::{BindGroupLayoutEntry, Instance, RequestAdapterOptions};
 
 #[derive(Clone)]
 pub struct Sampler {
@@ -44,4 +47,38 @@ impl RenderDevice {
                 }),
         }
     }
+}
+
+#[derive(Clone)]
+pub struct RenderQueue(pub Arc<wgpu::Queue>);
+
+pub struct RenderAdapter(pub Arc<wgpu::Adapter>);
+
+pub async fn initialize_resources(
+    instance: &Instance,
+    request_adapter_options: &RequestAdapterOptions<'_, '_>,
+) -> (RenderDevice, RenderQueue, RenderAdapter) {
+    let adapter = instance
+        .request_adapter(request_adapter_options)
+        .await
+        .expect("Unable to find a GPU! Make sure you have installed required drivers!");
+
+    let adapter_info = adapter.get_info();
+    info!("{:?}", adapter_info);
+
+    let (device, queue) = adapter
+        .request_device(
+            &wgpu::DeviceDescriptor {
+                ..Default::default()
+            },
+            None,
+        )
+        .await
+        .unwrap();
+
+    (
+        RenderDevice { device },
+        RenderQueue(Arc::new(queue)),
+        RenderAdapter(Arc::new(adapter)),
+    )
 }

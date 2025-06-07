@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 wgpu = { version = "24" }
 encase = { version = "0.10" }
+tracing = { version = "0.1" }
