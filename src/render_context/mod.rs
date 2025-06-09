@@ -13,9 +13,9 @@ pub use render_pass_context::*;
 use wgpu::CommandEncoder;
 
 use crate::{
-    CachedComputePipelineId, CachedRenderPipelineId, ComputePipeline, PipelineCache,
-    PipelineStorage, Ref, RenderDevice, RenderPassOwned, RenderPipeline, ResourceTable,
-    ResourceView, TransientResource, TransientResourceCache,
+    CachedComputePipelineId, CachedRenderPipelineId, ComputePipeline, GetPipelineCache,
+    PipelineCache, Ref, RenderDevice, RenderPassOwned, RenderPipeline, ResourceTable, ResourceView,
+    TransientResource, TransientResourceCache,
 };
 
 pub struct RenderContext<'a> {
@@ -27,7 +27,7 @@ pub struct RenderContext<'a> {
 }
 
 impl<'a> RenderContext<'a> {
-    pub fn new<T: PipelineStorage>(
+    pub fn new<T: GetPipelineCache>(
         render_device: &'a RenderDevice,
         transient_resource_cache: &'a mut TransientResourceCache,
         pipeline_storage: &'a T,

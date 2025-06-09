@@ -3,6 +3,7 @@ name = "frame-graph"
 version = "0.1.0"
 edition = "2024"
 
+
 [dependencies]
 wgpu = { version = "24" }
 encase = { version = "0.10" }
