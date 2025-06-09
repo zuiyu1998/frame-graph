@@ -28,8 +28,8 @@ pub use transient_resource::*;
 
 pub use wgpu::{
     BindGroupLayout, BindGroupLayoutDescriptor, BindGroupLayoutEntry, BindingType,
-    CompositeAlphaMode, DepthStencilState, DeviceDescriptor, Instance, InstanceDescriptor,
+    CompositeAlphaMode, DepthStencilState, Device, DeviceDescriptor, Instance, InstanceDescriptor,
     MultisampleState, PresentMode, PrimitiveState, PushConstantRange, Queue, RequestAdapterOptions,
-    ShaderStages, SurfaceConfiguration, SurfaceTexture, TextureFormat, TextureUsages,
+    ShaderStages, Surface, SurfaceConfiguration, SurfaceTexture, TextureFormat, TextureUsages,
     TextureView as RawTextureView, TextureViewDescriptor,
 };
