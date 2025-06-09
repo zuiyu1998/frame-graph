@@ -10,7 +10,7 @@ pub use pipeline_cache::*;
 
 use tracing::info;
 
-use crate::{BindGroupLayout, Instance, RequestAdapterOptions};
+use crate::{Instance, RequestAdapterOptions};
 
 #[derive(Clone)]
 pub struct Sampler {
@@ -31,14 +31,6 @@ pub struct RenderDevice {
 impl RenderDevice {
     pub fn wgpu_device(&self) -> &wgpu::Device {
         &self.device
-    }
-
-    #[inline]
-    pub fn create_bind_group_layout<'a>(
-        &self,
-        desc: &BindGroupLayoutInfo,
-    ) -> BindGroupLayout {
-        self.device.create_bind_group_layout(&desc.get_raw())
     }
 }
 

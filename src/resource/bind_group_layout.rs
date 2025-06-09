@@ -1,24 +1,6 @@
 use std::{collections::HashMap, num::NonZero};
 
-use crate::{BindGroupLayoutEntry, BindingType, BindGroupLayoutDescriptor, ShaderStages};
-#[cfg(feature = "serde")]
-use serde::{Deserialize, Serialize};
-
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct BindGroupLayoutInfo {
-    pub label: Option<String>,
-    pub entries: Vec<BindGroupLayoutEntry>,
-}
-
-impl BindGroupLayoutInfo {
-    pub fn get_raw(&self) -> BindGroupLayoutDescriptor {
-        BindGroupLayoutDescriptor {
-            label: self.label.as_deref(),
-            entries: &self.entries,
-        }
-    }
-}
+use crate::{BindGroupLayoutEntry, BindingType, ShaderStages};
 
 pub struct BindGroupLayoutEntriesBuilder {
     entries: Vec<wgpu::BindGroupLayoutEntry>,
