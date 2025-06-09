@@ -9,7 +9,8 @@ pub use pipeline::*;
 pub use pipeline_cache::*;
 
 use tracing::info;
-use wgpu::{BindGroupLayoutEntry, Instance, RequestAdapterOptions};
+
+use crate::{BindGroupLayout, Instance, RequestAdapterOptions};
 
 #[derive(Clone)]
 pub struct Sampler {
@@ -35,17 +36,9 @@ impl RenderDevice {
     #[inline]
     pub fn create_bind_group_layout<'a>(
         &self,
-        label: impl Into<wgpu::Label<'a>>,
-        entries: &'a [BindGroupLayoutEntry],
+        desc: &BindGroupLayoutDescriptor,
     ) -> BindGroupLayout {
-        BindGroupLayout {
-            layout: self
-                .device
-                .create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
-                    label: label.into(),
-                    entries,
-                }),
-        }
+        self.device.create_bind_group_layout(&desc.get_raw())
     }
 }
 

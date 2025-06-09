@@ -1,15 +1,20 @@
 use std::{collections::HashMap, num::NonZero};
 
-use wgpu::{BindGroupLayoutEntry, BindingType, ShaderStages};
+use crate::{BindGroupLayoutEntry, BindingType, RawBindGroupLayoutDescriptor, ShaderStages};
 
-#[derive(Clone)]
-pub struct BindGroupLayout {
-    pub layout: wgpu::BindGroupLayout,
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub struct BindGroupLayoutDescriptor {
+    pub label: Option<String>,
+    pub entries: Vec<BindGroupLayoutEntry>,
 }
 
-impl BindGroupLayout {
-    pub fn wgpu_layout(&self) -> &wgpu::BindGroupLayout {
-        &self.layout
+impl BindGroupLayoutDescriptor {
+    pub fn get_raw(&self) -> RawBindGroupLayoutDescriptor {
+        RawBindGroupLayoutDescriptor {
+            label: self.label.as_deref(),
+            entries: &self.entries,
+        }
     }
 }
 

@@ -26,4 +26,7 @@ pub use resource_node::*;
 pub use resource_table::*;
 pub use transient_resource::*;
 
-pub use wgpu;
+pub use wgpu::{
+    BindGroupLayout, BindGroupLayoutDescriptor as RawBindGroupLayoutDescriptor,
+    BindGroupLayoutEntry, BindingType, Instance, RequestAdapterOptions, ShaderStages,
+};
