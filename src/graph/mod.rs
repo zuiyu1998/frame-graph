@@ -1,6 +1,8 @@
 use std::{borrow::Cow, sync::Arc};
 
-use crate::{BindGroupHandleBuilder, BindGroupLayout, PassBuilder, PassNodeBuilder};
+use wgpu::BindGroupLayout;
+
+use crate::{BindGroupHandleBuilder, PassBuilder, PassNodeBuilder};
 
 use super::{
     DevicePass, Handle, IndexHandle, IntoArcTransientResource, PassNode, RenderContext,

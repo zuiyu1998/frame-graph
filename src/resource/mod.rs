@@ -10,7 +10,7 @@ pub use pipeline_cache::*;
 
 use tracing::info;
 
-use crate::{Instance, RequestAdapterOptions};
+use wgpu::{Instance, RequestAdapterOptions};
 
 #[derive(Clone)]
 pub struct Sampler {

@@ -1,8 +1,8 @@
 use std::{borrow::Cow, collections::HashMap, num::NonZero};
 
-use wgpu::BufferBinding;
+use wgpu::{BindGroupLayout, BufferBinding};
 
-use crate::{BindGroupLayout, RenderContext, ResourceBinding, TransientBuffer};
+use crate::{RenderContext, ResourceBinding, TransientBuffer};
 
 use super::{BindGroupEntryBinding, BindGroupResourceBinding};
 

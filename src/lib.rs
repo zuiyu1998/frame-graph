@@ -26,10 +26,4 @@ pub use resource_node::*;
 pub use resource_table::*;
 pub use transient_resource::*;
 
-pub use wgpu::{
-    BindGroupLayout, BindGroupLayoutDescriptor, BindGroupLayoutEntry, BindingType,
-    CompositeAlphaMode, DepthStencilState, Device, DeviceDescriptor, Instance, InstanceDescriptor,
-    MultisampleState, PresentMode, PrimitiveState, PushConstantRange, Queue, RequestAdapterOptions,
-    ShaderStages, Surface, SurfaceConfiguration, SurfaceTexture, TextureFormat, TextureUsages,
-    TextureView as RawTextureView, TextureViewDescriptor,
-};
+pub use wgpu;

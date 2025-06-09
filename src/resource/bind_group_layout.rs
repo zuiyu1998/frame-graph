@@ -1,6 +1,6 @@
 use std::{collections::HashMap, num::NonZero};
 
-use crate::{BindGroupLayoutEntry, BindingType, ShaderStages};
+use wgpu::{BindGroupLayoutEntry, BindingType, ShaderStages};
 
 pub struct BindGroupLayoutEntriesBuilder {
     entries: Vec<wgpu::BindGroupLayoutEntry>,

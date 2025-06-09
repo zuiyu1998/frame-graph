@@ -1,7 +1,9 @@
 use std::borrow::Cow;
 
+use wgpu::BindGroupLayout;
+
 use crate::{
-    BindGroupEntryHandle, BindGroupHandle, BindGroupLayout, BindGroupResourceHandleHelper,
+    BindGroupEntryHandle, BindGroupHandle, BindGroupResourceHandleHelper,
     BindGroupTextureViewHandleHelper, FrameGraph, IntoBindGroupResourceHandle,
 };
 
