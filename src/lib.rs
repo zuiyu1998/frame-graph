@@ -28,5 +28,6 @@ pub use transient_resource::*;
 
 pub use wgpu::{
     BindGroupLayout, BindGroupLayoutDescriptor as RawBindGroupLayoutDescriptor,
-    BindGroupLayoutEntry, BindingType, Instance, RequestAdapterOptions, ShaderStages,
+    BindGroupLayoutEntry, BindingType, DepthStencilState, Instance, MultisampleState,
+    PrimitiveState, PushConstantRange, RequestAdapterOptions, ShaderStages,
 };
