@@ -122,7 +122,7 @@ impl ResourceBinding for BindGroupBinding {
             .wgpu_device()
             .create_bind_group(&wgpu::BindGroupDescriptor {
                 label: self.label.as_deref(),
-                layout: self.layout.wgpu_layout(),
+                layout: &self.layout,
                 entries: &temp
                     .iter()
                     .map(|(binding, resource)| wgpu::BindGroupEntry {
