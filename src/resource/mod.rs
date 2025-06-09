@@ -36,7 +36,7 @@ impl RenderDevice {
     #[inline]
     pub fn create_bind_group_layout<'a>(
         &self,
-        desc: &BindGroupLayoutDescriptor,
+        desc: &BindGroupLayoutInfo,
     ) -> BindGroupLayout {
         self.device.create_bind_group_layout(&desc.get_raw())
     }
