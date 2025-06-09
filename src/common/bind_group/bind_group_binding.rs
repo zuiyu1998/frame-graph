@@ -1,8 +1,8 @@
 use std::{borrow::Cow, collections::HashMap, num::NonZero};
 
-use wgpu::BufferBinding;
+use wgpu::{BindGroupLayout, BufferBinding};
 
-use crate::{BindGroupLayout, RenderContext, ResourceBinding, TransientBuffer};
+use crate::{RenderContext, ResourceBinding, TransientBuffer};
 
 use super::{BindGroupEntryBinding, BindGroupResourceBinding};
 
@@ -122,7 +122,7 @@ impl ResourceBinding for BindGroupBinding {
             .wgpu_device()
             .create_bind_group(&wgpu::BindGroupDescriptor {
                 label: self.label.as_deref(),
-                layout: self.layout.wgpu_layout(),
+                layout: &self.layout,
                 entries: &temp
                     .iter()
                     .map(|(binding, resource)| wgpu::BindGroupEntry {

@@ -2,17 +2,6 @@ use std::{collections::HashMap, num::NonZero};
 
 use wgpu::{BindGroupLayoutEntry, BindingType, ShaderStages};
 
-#[derive(Clone)]
-pub struct BindGroupLayout {
-    pub layout: wgpu::BindGroupLayout,
-}
-
-impl BindGroupLayout {
-    pub fn wgpu_layout(&self) -> &wgpu::BindGroupLayout {
-        &self.layout
-    }
-}
-
 pub struct BindGroupLayoutEntriesBuilder {
     entries: Vec<wgpu::BindGroupLayoutEntry>,
     default_visibility: ShaderStages,
