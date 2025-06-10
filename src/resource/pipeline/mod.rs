@@ -5,6 +5,10 @@ impl RenderPipeline {
     pub fn wgpu(&self) -> &wgpu::RenderPipeline {
         &self.0
     }
+
+    pub fn new(pipeline: wgpu::RenderPipeline) -> Self {
+        RenderPipeline(pipeline)
+    }
 }
 
 #[derive(Clone)]
@@ -13,6 +17,10 @@ pub struct ComputePipeline(wgpu::ComputePipeline);
 impl ComputePipeline {
     pub fn wgpu(&self) -> &wgpu::ComputePipeline {
         &self.0
+    }
+
+    pub fn new(pipeline: wgpu::ComputePipeline) -> Self {
+        ComputePipeline(pipeline)
     }
 }
 
