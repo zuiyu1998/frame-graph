@@ -62,6 +62,10 @@ impl<'a> PassBuilder<'a> {
         }
     }
 
+    pub fn create_render_pass_builder<'b>(&'a mut self, name: &str) -> RenderPassBuilder<'a, 'b> {
+        RenderPassBuilder::new(self, name)
+    }
+
     pub fn add_executor<T: EncoderExecutor>(&mut self, executor: T) {
         self.pass.executors.push(Box::new(executor));
     }
