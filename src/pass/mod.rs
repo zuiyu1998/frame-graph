@@ -62,7 +62,7 @@ impl<'a> PassBuilder<'a> {
         }
     }
 
-    pub fn create_render_pass_builder<'b>(&'a mut self, name: &str) -> RenderPassBuilder<'a, 'b> {
+    pub fn create_render_pass_builder<'b>(&'b mut self, name: &str) -> RenderPassBuilder<'a, 'b> {
         RenderPassBuilder::new(self, name)
     }
 
