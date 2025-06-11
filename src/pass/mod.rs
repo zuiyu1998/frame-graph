@@ -4,11 +4,7 @@ pub mod render_pass_builder;
 pub use render_pass::*;
 pub use render_pass_builder::*;
 
-use std::{
-    borrow::Cow,
-    mem::take,
-    ops::{Deref, DerefMut},
-};
+use std::borrow::Cow;
 
 use wgpu::CommandEncoder;
 
@@ -17,27 +13,6 @@ use crate::{EncoderCommand, EncoderCommandBuilder, PassNodeBuilder, RenderContex
 pub struct PassBuilder<'a> {
     pass_node_builder: PassNodeBuilder<'a>,
     pass: Pass,
-}
-
-impl<'a> Deref for PassBuilder<'a> {
-    type Target = PassNodeBuilder<'a>;
-
-    fn deref(&self) -> &Self::Target {
-        &self.pass_node_builder
-    }
-}
-
-impl DerefMut for PassBuilder<'_> {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.pass_node_builder
-    }
-}
-
-impl Drop for PassBuilder<'_> {
-    fn drop(&mut self) {
-        let pass = take(&mut self.pass);
-        self.pass_node_builder.set_pass(pass);
-    }
 }
 
 impl EncoderCommandBuilder for PassBuilder<'_> {
