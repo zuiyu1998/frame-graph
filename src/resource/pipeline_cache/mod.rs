@@ -8,7 +8,7 @@ pub struct CachedRenderPipelineId(CachedPipelineId);
 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq, PartialOrd, Ord)]
 pub struct CachedComputePipelineId(CachedPipelineId);
 
-pub trait PipelineStorage {
+pub trait GetPipelineCache {
     fn get_pipeline_cache(&self) -> PipelineCache;
 }
 
