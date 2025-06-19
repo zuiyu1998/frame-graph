@@ -4,7 +4,7 @@ pub mod render_pass_builder;
 pub use render_pass::*;
 pub use render_pass_builder::*;
 
-use std::borrow::Cow;
+use std::{borrow::Cow, mem::take};
 
 use wgpu::CommandEncoder;
 
@@ -13,6 +13,13 @@ use crate::{EncoderCommand, EncoderCommandBuilder, PassNodeBuilder, RenderContex
 pub struct PassBuilder<'a> {
     pass_node_builder: PassNodeBuilder<'a>,
     pass: Pass,
+}
+
+impl Drop for PassBuilder<'_> {
+    fn drop(&mut self) {
+        let pass = take(&mut self.pass);
+        self.pass_node_builder.set_pass(pass);
+    }
 }
 
 impl EncoderCommandBuilder for PassBuilder<'_> {
