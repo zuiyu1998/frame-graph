@@ -1,7 +1,7 @@
 use wgpu::{Extent3d, ImageSubresourceRange, QuerySet, ShaderStages};
 
 use crate::{
-    BindGroupBinding, CachedRenderPipelineId, ResourceBinding, ResourceRead, ResourceWrite,
+    BindGroupBinding, CachedPipelineId, ResourceBinding, ResourceRead, ResourceWrite,
     TexelCopyBufferInfo, TexelCopyTextureInfo, TransientBuffer, TransientTexture,
 };
 
@@ -271,7 +271,7 @@ pub trait RenderPassCommandBuilder {
         }));
     }
 
-    fn set_render_pipeline(&mut self, id: CachedRenderPipelineId) {
+    fn set_render_pipeline(&mut self, id: CachedPipelineId) {
         self.add_render_pass_command(RenderPassCommand::new(SetRenderPipelineParameter { id }));
     }
 
@@ -555,7 +555,7 @@ impl<'a, 'b> RenderPassContext<'a, 'b> {
         self.render_pass.set_bind_group(index, &bind_group, offsets);
     }
 
-    pub fn set_render_pipeline(&mut self, id: CachedRenderPipelineId) {
+    pub fn set_render_pipeline(&mut self, id: CachedPipelineId) {
         let pipeline = self.render_context.get_render_pipeline(id);
         self.render_pass.set_pipeline(pipeline.wgpu());
     }

@@ -3,9 +3,8 @@ use std::ops::Range;
 use wgpu::{Extent3d, ImageSubresourceRange, QuerySet, ShaderStages};
 
 use crate::{
-    BindGroupBinding, CachedComputePipelineId, CachedRenderPipelineId, Ref, RenderPassContext,
-    ResourceRead, ResourceWrite, TexelCopyBufferInfo, TexelCopyTextureInfo, TransientBuffer,
-    TransientTexture,
+    BindGroupBinding, CachedPipelineId, Ref, RenderPassContext, ResourceRead, ResourceWrite,
+    TexelCopyBufferInfo, TexelCopyTextureInfo, TransientBuffer, TransientTexture,
 };
 
 use super::{
@@ -492,7 +491,7 @@ impl ErasedRenderPassCommand for SetVertexBufferParameter {
 }
 
 pub struct SetComputePipelineParameter {
-    pub id: CachedComputePipelineId,
+    pub id: CachedPipelineId,
 }
 
 impl ErasedComputePassCommand for SetComputePipelineParameter {
@@ -502,7 +501,7 @@ impl ErasedComputePassCommand for SetComputePipelineParameter {
 }
 
 pub struct SetRenderPipelineParameter {
-    pub id: CachedRenderPipelineId,
+    pub id: CachedPipelineId,
 }
 
 impl ErasedRenderPassCommand for SetRenderPipelineParameter {

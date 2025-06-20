@@ -9,7 +9,7 @@ use super::{
     SetPushConstantsComputeParameter, WriteTimestampParameter,
 };
 use crate::{
-    BindGroupBinding, CachedComputePipelineId, Ref, ResourceBinding, ResourceRead, ResourceWrite,
+    BindGroupBinding, CachedPipelineId, Ref, ResourceBinding, ResourceRead, ResourceWrite,
     TexelCopyBufferInfo, TexelCopyTextureInfo, TransientBuffer, TransientTexture,
 };
 
@@ -81,7 +81,7 @@ pub trait ComputePassCommandBuilder {
         }));
     }
 
-    fn set_compute_pipeline(&mut self, id: CachedComputePipelineId) {
+    fn set_compute_pipeline(&mut self, id: CachedPipelineId) {
         self.add_compute_pass_command(ComputePassCommand::new(SetComputePipelineParameter { id }));
     }
 
@@ -244,7 +244,7 @@ impl<'a, 'b> ComputePassContext<'a, 'b> {
         self.compute_pass.dispatch_workgroups(x, y, z);
     }
 
-    pub fn set_compute_pipeline(&mut self, id: CachedComputePipelineId) {
+    pub fn set_compute_pipeline(&mut self, id: CachedPipelineId) {
         let pipeline = self.render_context.get_compute_pipeline(id);
         self.compute_pass.set_pipeline(pipeline.wgpu());
     }

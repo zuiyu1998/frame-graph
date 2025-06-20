@@ -13,9 +13,9 @@ pub use render_pass_context::*;
 use wgpu::CommandEncoder;
 
 use crate::{
-    CachedComputePipelineId, CachedRenderPipelineId, ComputePipeline, GetPipelineCache,
-    PipelineCache, Ref, RenderDevice, RenderPassOwned, RenderPipeline, ResourceTable, ResourceView,
-    TransientResource, TransientResourceCache,
+    CachedPipelineId, ComputePipeline, GetPipelineCache, PipelineCache, Ref, RenderDevice,
+    RenderPassOwned, RenderPipeline, ResourceTable, ResourceView, TransientResource,
+    TransientResourceCache,
 };
 
 pub struct RenderContext<'a> {
@@ -60,13 +60,13 @@ impl<'a> RenderContext<'a> {
             .expect("resource mut have")
     }
 
-    pub fn get_compute_pipeline(&self, id: CachedComputePipelineId) -> &ComputePipeline {
+    pub fn get_compute_pipeline(&self, id: CachedPipelineId) -> &ComputePipeline {
         self.pipeline_cache
             .get_compute_pipeline(id)
             .expect("compute pipeline mut have")
     }
 
-    pub fn get_render_pipeline(&self, id: CachedRenderPipelineId) -> &RenderPipeline {
+    pub fn get_render_pipeline(&self, id: CachedPipelineId) -> &RenderPipeline {
         self.pipeline_cache
             .get_render_pipeline(id)
             .expect("render pipeline mut have")

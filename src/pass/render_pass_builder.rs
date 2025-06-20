@@ -3,7 +3,7 @@ use std::{mem::take, ops::Range};
 use wgpu::{QuerySet, ShaderStages};
 
 use crate::{
-    BindGroupBinding, CachedRenderPipelineId, ColorAttachment, ColorAttachmentOwned,
+    BindGroupBinding, CachedPipelineId, ColorAttachment, ColorAttachmentOwned,
     DepthStencilAttachment, Ref, RenderPass, RenderPassCommandBuilder, ResourceMaterial,
     ResourceRead, ResourceWrite, TransientBuffer,
 };
@@ -273,7 +273,7 @@ impl<'a, 'b> RenderPassBuilder<'a, 'b> {
         self
     }
 
-    pub fn set_render_pipeline(&mut self, id: CachedRenderPipelineId) -> &mut Self {
+    pub fn set_render_pipeline(&mut self, id: CachedPipelineId) -> &mut Self {
         self.render_pass.set_render_pipeline(id);
         self
     }
