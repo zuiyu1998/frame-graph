@@ -39,4 +39,8 @@ impl GpuTextureView {
     pub fn new(texture_view: WgpuTextureView) -> Self {
         Self(texture_view)
     }
+
+    pub(crate) fn get_wgpu_texture_view(&self) -> &WgpuTextureView {
+        &self.0
+    }
 }
