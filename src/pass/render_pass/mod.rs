@@ -1,14 +1,12 @@
 use wgpu::{Color, Operations};
 
 use crate::{
-    frame_graph::{
-        TransientTextureView,
-        pass::{PassCommand, PassContext},
-    },
+    TransientTextureView,
     gfx_base::{
         GpuRenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment,
         RenderPassDescriptor,
     },
+    pass::{PassCommand, PassContext},
 };
 
 pub struct TransientRenderPassColorAttachment {

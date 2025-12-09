@@ -5,7 +5,7 @@ pub use render_pass::*;
 use wgpu::{CommandBuffer, CommandEncoder};
 
 use crate::{
-    frame_graph::{Ref, ResourceTable, ResourceView, TransientResource},
+    Ref, ResourceTable, ResourceView, TransientResource,
     gfx_base::{CommandEncoderDescriptor, RenderDevice},
 };
 

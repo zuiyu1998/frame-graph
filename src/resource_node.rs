@@ -1,6 +1,6 @@
 use core::{fmt::Debug, marker::PhantomData};
 
-use crate::frame_graph::{
+use crate::{
     AnyTransientResourceDescriptor, ArcTransientResource, IndexHandle, PassNode, TransientResource,
     TransientResourceDescriptor,
 };

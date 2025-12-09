@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
-use crate::frame_graph::{
+use crate::gfx_base::RenderDevice;
+use crate::{
     AnyTransientResource, ArcTransientResource, IndexHandle, Ref, ResourceNode, ResourceRelease,
     ResourceRequese, ResourceView, TransientResource, TransientResourceCache,
     TransientResourceCreator, VirtualResource,
 };
-use crate::gfx_base::RenderDevice;
 
 #[derive(Default)]
 pub struct ResourceTable {

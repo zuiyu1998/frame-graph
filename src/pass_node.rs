@@ -1,4 +1,4 @@
-use crate::frame_graph::Pass;
+use crate::Pass;
 
 use super::{GraphRawResourceHandle, IndexHandle, ResourceNode};
 
