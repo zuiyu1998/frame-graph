@@ -4,16 +4,31 @@ pub use render_pass::*;
 
 use wgpu::{CommandBuffer, CommandEncoder};
 
-use crate::gfx_base::{CommandEncoderDescriptor, RenderDevice};
+use crate::{
+    frame_graph::{Ref, ResourceTable, ResourceView, TransientResource},
+    gfx_base::{CommandEncoderDescriptor, RenderDevice},
+};
 
 pub struct PassContext<'a> {
-    pub render_device: &'a RenderDevice,
-    pub command_encoder: CommandEncoder,
+    render_device: &'a RenderDevice,
+    command_encoder: CommandEncoder,
+    resource_table: &'a ResourceTable,
 }
 
 impl PassContext<'_> {
+    pub fn render_device(&self) -> &RenderDevice {
+        self.render_device
+    }
+
     pub fn finish(self) -> CommandBuffer {
         self.command_encoder.finish()
+    }
+
+    pub fn get_resource<ResourceType: TransientResource, ViewType: ResourceView>(
+        &self,
+        resource_ref: &Ref<ResourceType, ViewType>,
+    ) -> &ResourceType {
+        self.resource_table.get_resource(&resource_ref)
     }
 }
 
@@ -28,7 +43,12 @@ pub struct Pass {
 }
 
 impl Pass {
-    pub fn render(&self, command_buffers: &mut Vec<CommandBuffer>, render_device: &RenderDevice) {
+    pub fn render(
+        &self,
+        command_buffers: &mut Vec<CommandBuffer>,
+        render_device: &RenderDevice,
+        resource_table: &ResourceTable,
+    ) {
         let command_encoder = render_device.create_command_encoder(&CommandEncoderDescriptor {
             label: self.label.clone(),
         });
@@ -36,6 +56,7 @@ impl Pass {
         let mut pass_context = PassContext {
             render_device,
             command_encoder,
+            resource_table,
         };
 
         for command in self.commands.iter() {

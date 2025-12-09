@@ -45,9 +45,9 @@ impl RenderPassColorAttachment {
 }
 
 pub struct RenderPassDescriptor {
-    label: Option<String>,
-    color_attachments: Vec<Option<RenderPassColorAttachment>>,
-    depth_stencil_attachment: Option<RenderPassDepthStencilAttachment>,
+    pub label: Option<String>,
+    pub color_attachments: Vec<Option<RenderPassColorAttachment>>,
+    pub depth_stencil_attachment: Option<RenderPassDepthStencilAttachment>,
 }
 
 pub struct GpuRenderPass(wgpu::RenderPass<'static>);

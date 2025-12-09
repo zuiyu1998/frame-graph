@@ -44,3 +44,13 @@ impl GpuTextureView {
         &self.0
     }
 }
+
+pub struct TextureView {
+    value: GpuTextureView,
+}
+
+impl TextureView {
+    pub(crate) fn value(&self) -> &GpuTextureView {
+        &self.value
+    }
+}

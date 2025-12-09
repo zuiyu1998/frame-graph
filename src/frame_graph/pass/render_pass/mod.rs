@@ -1,21 +1,114 @@
+use wgpu::{Color, Operations};
+
 use crate::{
-    frame_graph::pass::{PassCommand, PassContext},
-    gfx_base::{RenderPassColorAttachment, RenderPassDescriptor},
+    frame_graph::{
+        TransientTextureView,
+        pass::{PassCommand, PassContext},
+    },
+    gfx_base::{
+        GpuRenderPass, RenderPassColorAttachment, RenderPassDepthStencilAttachment,
+        RenderPassDescriptor,
+    },
 };
 
-pub struct RenderPassColorAttachmentDescriptor {}
+pub struct TransientRenderPassColorAttachment {
+    pub view: TransientTextureView,
+    pub depth_slice: Option<u32>,
+    pub resolve_target: Option<TransientTextureView>,
+    pub ops: Operations<Color>,
+}
 
-pub struct RenderPassDepthStencilAttachmentDescriptor {}
+impl TransientRenderPassColorAttachment {
+    pub fn create_render_pass_color_attachment(
+        &self,
+        context: &PassContext,
+    ) -> RenderPassColorAttachment {
+        RenderPassColorAttachment {
+            view: self.view.create_gpu_texture_view(context),
+            depth_slice: self.depth_slice.clone(),
+            resolve_target: self
+                .resolve_target
+                .as_ref()
+                .map(|resolve_target| resolve_target.create_gpu_texture_view(context)),
+            ops: self.ops.clone(),
+        }
+    }
+}
 
-pub struct TransientRenderPassDescriptor {
-    label: Option<String>,
-    color_attachments: Option<RenderPassColorAttachmentDescriptor>,
-    depth_stencil_attachment: Option<RenderPassDepthStencilAttachmentDescriptor>,
+pub struct TransientRenderPassDepthStencilAttachment {
+    pub view: TransientTextureView,
+    pub depth_ops: Option<Operations<f32>>,
+    pub stencil_ops: Option<Operations<u32>>,
+}
+
+impl TransientRenderPassDepthStencilAttachment {
+    pub fn create_render_pass_depth_stencil_attachment(
+        &self,
+        context: &PassContext,
+    ) -> RenderPassDepthStencilAttachment {
+        RenderPassDepthStencilAttachment {
+            view: self.view.create_gpu_texture_view(context),
+            depth_ops: self.depth_ops.clone(),
+            stencil_ops: self.stencil_ops.clone(),
+        }
+    }
 }
 
 #[derive(Default)]
-pub struct RenderPass {}
+pub struct TransientRenderPassDescriptor {
+    pub label: Option<String>,
+    pub color_attachments: Vec<Option<TransientRenderPassColorAttachment>>,
+    pub depth_stencil_attachment: Option<TransientRenderPassDepthStencilAttachment>,
+}
+
+impl TransientRenderPassDescriptor {
+    pub fn create_render_pass_descriptor(&self, context: &PassContext) -> RenderPassDescriptor {
+        RenderPassDescriptor {
+            label: self.label.clone(),
+            color_attachments: self
+                .color_attachments
+                .iter()
+                .map(|color_attachment| {
+                    color_attachment.as_ref().map(|color_attachment| {
+                        color_attachment.create_render_pass_color_attachment(context)
+                    })
+                })
+                .collect(),
+            depth_stencil_attachment: self.depth_stencil_attachment.as_ref().map(
+                |depth_stencil_attachment| {
+                    depth_stencil_attachment.create_render_pass_depth_stencil_attachment(context)
+                },
+            ),
+        }
+    }
+}
+
+pub struct RenderPassContext<'a, 'b> {
+    render_pass: GpuRenderPass,
+    pass_context: &'b mut PassContext<'a>,
+}
+
+pub trait RenderPassCommand: Sync + Send + 'static {
+    fn execute(&self, render_pass_context: &mut RenderPassContext);
+}
+
+#[derive(Default)]
+pub struct RenderPass {
+    desc: TransientRenderPassDescriptor,
+    commands: Vec<Box<dyn RenderPassCommand>>,
+}
 
 impl PassCommand for RenderPass {
-    fn execute(&self, context: &mut PassContext) {}
+    fn execute(&self, context: &mut PassContext) {
+        let desc = self.desc.create_render_pass_descriptor(context);
+        let render_pass = GpuRenderPass::begin_render_pass(&mut context.command_encoder, &desc);
+        let mut render_pass_context = RenderPassContext {
+            render_pass,
+            pass_context: context,
+        };
+
+        for command in self.commands.iter() {
+            command.execute(&mut render_pass_context);
+        }
+    }
 }
