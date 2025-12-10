@@ -1,8 +1,10 @@
 mod render_pass_builder;
 mod pass_builder;
+mod parameter;
 
 pub use render_pass_builder::*;
 pub use pass_builder::*;
+pub use parameter::RenderPassExt;
 
 use super::{
     FrameGraph, GraphRawResourceHandle, Handle, Pass, Ref, ResourceMaterial, ResourceRead,

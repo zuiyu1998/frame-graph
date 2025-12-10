@@ -1,3 +1,7 @@
+mod context;
+
+pub use context::*;
+
 use wgpu::{Color, Operations};
 
 use crate::{
@@ -81,11 +85,6 @@ impl TransientRenderPassDescriptor {
     }
 }
 
-pub struct RenderPassContext<'a, 'b> {
-    render_pass: GpuRenderPass,
-    pass_context: &'b mut PassContext<'a>,
-}
-
 pub trait RenderPassCommand: Sync + Send + 'static {
     fn execute(&self, render_pass_context: &mut RenderPassContext);
 }
@@ -93,7 +92,7 @@ pub trait RenderPassCommand: Sync + Send + 'static {
 #[derive(Default)]
 pub struct RenderPass {
     desc: TransientRenderPassDescriptor,
-    commands: Vec<Box<dyn RenderPassCommand>>,
+    pub(crate) commands: Vec<Box<dyn RenderPassCommand>>,
 }
 
 impl RenderPass {
@@ -106,10 +105,7 @@ impl PassCommand for RenderPass {
     fn execute(&self, context: &mut PassContext) {
         let desc = self.desc.create_render_pass_descriptor(context);
         let render_pass = GpuRenderPass::begin_render_pass(&mut context.command_encoder, &desc);
-        let mut render_pass_context = RenderPassContext {
-            render_pass,
-            pass_context: context,
-        };
+        let mut render_pass_context = RenderPassContext::new(render_pass, context);
 
         for command in self.commands.iter() {
             command.execute(&mut render_pass_context);

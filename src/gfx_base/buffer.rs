@@ -8,6 +8,10 @@ use wgpu::{
 pub struct GpuBuffer(WgpuBuffer);
 
 impl GpuBuffer {
+    pub(crate) fn get_wgpu_buffer(&self) -> &WgpuBuffer {
+        &self.0
+    }
+
     pub fn size(&self) -> u64 {
         self.0.size()
     }

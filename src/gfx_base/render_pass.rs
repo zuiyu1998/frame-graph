@@ -53,6 +53,10 @@ pub struct RenderPassDescriptor {
 pub struct GpuRenderPass(wgpu::RenderPass<'static>);
 
 impl GpuRenderPass {
+    pub(crate) fn get_render_pass_mut(&mut self) -> &mut wgpu::RenderPass<'static> {
+        &mut self.0
+    }
+
     pub fn begin_render_pass(
         command_encoder: &mut wgpu::CommandEncoder,
         desc: &RenderPassDescriptor,
