@@ -1,6 +1,9 @@
 use std::mem::take;
 
-use crate::{Ref, RenderPass, ResourceRead, TransientBindGroup, TransientBuffer, gfx_base::CachedPipelineId};
+use crate::{
+    Ref, RenderPass, ResourceRead, TransientBindGroup, TransientBuffer,
+    TransientRenderPassColorAttachment, gfx_base::CachedPipelineId,
+};
 
 use super::{PassBuilder, RenderPassExt};
 
@@ -18,6 +21,15 @@ impl<'a, 'b> RenderPassBuilder<'a, 'b> {
             render_pass,
             pass_builder,
         }
+    }
+
+    pub fn add_color_attachment(
+        &mut self,
+        color_attachment: TransientRenderPassColorAttachment,
+    ) -> &mut Self {
+        self.render_pass
+            .add_color_attachment(Some(color_attachment));
+        self
     }
 
     pub fn set_render_pipeline(&mut self, id: CachedPipelineId) -> &mut Self {
