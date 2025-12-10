@@ -16,6 +16,10 @@ pub struct PassContext<'a> {
 }
 
 impl PassContext<'_> {
+    pub fn resource_table(&self) -> &ResourceTable {
+        self.resource_table
+    }
+
     pub fn render_device(&self) -> &RenderDevice {
         self.render_device
     }

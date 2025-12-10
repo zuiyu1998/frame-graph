@@ -1,6 +1,10 @@
-use wgpu::{CommandEncoder, Device};
+use wgpu::{BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device};
 
-use super::{BufferDescriptor, CommandEncoderDescriptor, GpuBuffer, GpuTexture, TextureDescriptor};
+use super::{
+    BindGroupDescriptor, BindGroupLayoutDescriptor, BindingResource, BufferDescriptor,
+    CommandEncoderDescriptor, GpuBindGroup, GpuBindGroupLayout, GpuBindingResource, GpuBuffer,
+    GpuSampler, GpuTexture, GpuTextureView, SamplerDescriptor, TextureDescriptor,
+};
 
 #[derive(Debug, Clone)]
 pub struct RenderDevice {
@@ -8,6 +12,82 @@ pub struct RenderDevice {
 }
 
 impl RenderDevice {
+    pub fn create_sampler(&self, desc: &SamplerDescriptor) -> GpuSampler {
+        let sampler = self.device.create_sampler(&desc.get_wgpu_desc());
+        GpuSampler::new(sampler)
+    }
+
+    pub fn create_bind_group(&self, desc: &BindGroupDescriptor) -> GpuBindGroup {
+        let entries = desc
+            .entries
+            .iter()
+            .map(|entry| match entry.resource {
+                GpuBindingResource::Buffer(ref binding) => (
+                    entry.binding,
+                    BindingResource::Buffer(binding.get_binding()),
+                ),
+                GpuBindingResource::BufferArray(ref bindings) => (
+                    entry.binding,
+                    BindingResource::BufferArray(
+                        bindings
+                            .iter()
+                            .map(|binding| binding.get_binding())
+                            .collect(),
+                    ),
+                ),
+                GpuBindingResource::Sampler(ref binding) => (
+                    entry.binding,
+                    BindingResource::Sampler(binding.get_wgpu_sampler()),
+                ),
+                GpuBindingResource::SamplerArray(ref bindings) => (
+                    entry.binding,
+                    BindingResource::SamplerArray(
+                        bindings.iter().map(GpuSampler::get_wgpu_sampler).collect(),
+                    ),
+                ),
+                GpuBindingResource::TextureView(ref binding) => (
+                    entry.binding,
+                    BindingResource::TextureView(binding.get_wgpu_texture_view()),
+                ),
+                GpuBindingResource::TextureViewArray(ref bindings) => (
+                    entry.binding,
+                    BindingResource::TextureViewArray(
+                        bindings
+                            .iter()
+                            .map(GpuTextureView::get_wgpu_texture_view)
+                            .collect(),
+                    ),
+                ),
+            })
+            .collect::<Vec<_>>();
+
+        let bind_group = self.device.create_bind_group(&wgpu::BindGroupDescriptor {
+            label: desc.label.as_deref(),
+            layout: desc.layout.get_wgpu_bind_group_layout(),
+            entries: &entries
+                .iter()
+                .map(|(binding, resource)| WgpuBindGroupEntry {
+                    binding: *binding,
+                    resource: resource.get_binding_resource(),
+                })
+                .collect::<Vec<_>>(),
+        });
+
+        GpuBindGroup::new(bind_group)
+    }
+
+    pub fn create_bind_group_layout(&self, desc: &BindGroupLayoutDescriptor) -> GpuBindGroupLayout {
+        let entries = desc.entries.clone();
+
+        let bind_group_layout =
+            self.device
+                .create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+                    label: None,
+                    entries: &entries,
+                });
+        GpuBindGroupLayout::new(bind_group_layout)
+    }
+
     pub fn create_command_encoder(&self, desc: &CommandEncoderDescriptor) -> CommandEncoder {
         self.device.create_command_encoder(&desc.get_buffer_desc())
     }

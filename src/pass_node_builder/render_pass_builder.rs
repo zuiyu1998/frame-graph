@@ -1,6 +1,6 @@
 use std::mem::take;
 
-use crate::{Ref, RenderPass, ResourceRead, TransientBuffer};
+use crate::{Ref, RenderPass, ResourceRead, TransientBindGroup, TransientBuffer};
 
 use super::{PassBuilder, RenderPassExt};
 
@@ -18,6 +18,17 @@ impl<'a, 'b> RenderPassBuilder<'a, 'b> {
             render_pass,
             pass_builder,
         }
+    }
+
+    pub fn set_bind_group(
+        &mut self,
+        index: u32,
+        bind_group: &TransientBindGroup,
+        offsets: &[u32],
+    ) -> &mut Self {
+        self.render_pass.set_bind_group(index, bind_group, offsets);
+
+        self
     }
 
     pub fn set_index_buffer(
