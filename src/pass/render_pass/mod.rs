@@ -96,6 +96,12 @@ pub struct RenderPass {
     commands: Vec<Box<dyn RenderPassCommand>>,
 }
 
+impl RenderPass {
+    pub fn set_pass_name(&mut self, name: &str) {
+        self.desc.label = Some(name.to_string());
+    }
+}
+
 impl PassCommand for RenderPass {
     fn execute(&self, context: &mut PassContext) {
         let desc = self.desc.create_render_pass_descriptor(context);

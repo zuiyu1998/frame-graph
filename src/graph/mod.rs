@@ -1,9 +1,10 @@
 use std::sync::Arc;
-
-use crate::gfx_base::{PipelineContainer, RenderDevice};
 use wgpu::CommandBuffer;
 
-use crate::{ResourceTable, TransientResourceCache};
+use crate::{
+    ResourceTable, TransientResourceCache,
+    gfx_base::{PipelineContainer, RenderDevice},
+};
 
 use super::{
     DevicePass, Handle, IndexHandle, IntoArcTransientResource, PassNode, ResourceBoard,

@@ -43,6 +43,10 @@ pub struct Pass {
 }
 
 impl Pass {
+    pub fn push<T: PassCommand>(&mut self, value: T) {
+        self.commands.push(Box::new(value));
+    }
+
     pub fn render(
         &self,
         command_buffers: &mut Vec<CommandBuffer>,

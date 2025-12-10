@@ -1,3 +1,9 @@
+mod render_pass_builder;
+mod pass_builder;
+
+pub use render_pass_builder::*;
+pub use pass_builder::*;
+
 use super::{
     FrameGraph, GraphRawResourceHandle, Handle, Pass, Ref, ResourceMaterial, ResourceRead,
     ResourceWrite, TransientResource,
