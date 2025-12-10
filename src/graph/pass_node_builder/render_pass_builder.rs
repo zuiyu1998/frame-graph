@@ -1,6 +1,6 @@
 use std::mem::take;
 
-use crate::{Ref, RenderPass, ResourceRead, TransientBindGroup, TransientBuffer};
+use crate::{Ref, RenderPass, ResourceRead, TransientBindGroup, TransientBuffer, gfx_base::CachedPipelineId};
 
 use super::{PassBuilder, RenderPassExt};
 
@@ -18,6 +18,11 @@ impl<'a, 'b> RenderPassBuilder<'a, 'b> {
             render_pass,
             pass_builder,
         }
+    }
+
+    pub fn set_render_pipeline(&mut self, id: CachedPipelineId) -> &mut Self {
+        self.render_pass.set_render_pipeline(id);
+        self
     }
 
     pub fn set_bind_group(

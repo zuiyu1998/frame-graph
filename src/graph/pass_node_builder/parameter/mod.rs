@@ -1,16 +1,22 @@
 mod set_bind_group_parameter;
 mod set_index_buffer_parameter;
 mod set_vertex_buffer_parameter;
+mod set_render_pipeline_parameter;
 
 use crate::{
-    Ref, RenderPass, RenderPassCommand, ResourceRead, TransientBindGroup, TransientBuffer,
+    Ref, RenderPass, RenderPassCommand, ResourceRead, TransientBindGroup, TransientBuffer, gfx_base::CachedPipelineId,
 };
 use set_bind_group_parameter::*;
 use set_index_buffer_parameter::*;
 use set_vertex_buffer_parameter::*;
+use set_render_pipeline_parameter::*;
 
 pub trait RenderPassExt {
     fn push<T: RenderPassCommand>(&mut self, value: T);
+
+    fn set_render_pipeline(&mut self, id: CachedPipelineId) {
+        self.push(SetRenderPipelineParameter { id });
+    }
 
     fn set_bind_group(&mut self, index: u32, bind_group: &TransientBindGroup, offsets: &[u32]) {
         self.push(SetBindGroupParameter {

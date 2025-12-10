@@ -37,6 +37,7 @@ impl DevicePass {
                 &mut context.command_buffers,
                 &context.render_device,
                 &context.resource_table,
+                &context.pipeline_container,
             );
         }
         self.release_resources(context);

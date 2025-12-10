@@ -1,5 +1,6 @@
 use crate::{
-    PassContext, Ref, ResourceRead, TransientBindGroup, TransientBuffer, gfx_base::GpuRenderPass,
+    PassContext, Ref, ResourceRead, TransientBindGroup, TransientBuffer,
+    gfx_base::{CachedPipelineId, GpuRenderPass},
 };
 
 pub struct RenderPassContext<'a, 'b> {
@@ -13,6 +14,13 @@ impl<'a, 'b> RenderPassContext<'a, 'b> {
             render_pass,
             pass_context,
         }
+    }
+
+    pub fn set_render_pipeline(&mut self, id: CachedPipelineId) {
+        let pipeline = self.pass_context.get_render_pipeline(id);
+        self.render_pass
+            .get_render_pass_mut()
+            .set_pipeline(pipeline.wgpu());
     }
 
     pub fn set_bind_group(&mut self, index: u32, bind_group: &TransientBindGroup, offsets: &[u32]) {

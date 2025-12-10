@@ -6,13 +6,17 @@ use wgpu::{CommandBuffer, CommandEncoder};
 
 use crate::{
     Ref, ResourceTable, ResourceView, TransientResource,
-    gfx_base::{CommandEncoderDescriptor, RenderDevice},
+    gfx_base::{
+        CachedPipelineId, CommandEncoderDescriptor, GpuRenderPipeline, PipelineContainer,
+        RenderDevice,
+    },
 };
 
 pub struct PassContext<'a> {
     render_device: &'a RenderDevice,
     command_encoder: CommandEncoder,
     resource_table: &'a ResourceTable,
+    pipeline_container: &'a PipelineContainer,
 }
 
 impl PassContext<'_> {
@@ -22,6 +26,12 @@ impl PassContext<'_> {
 
     pub fn render_device(&self) -> &RenderDevice {
         self.render_device
+    }
+
+    pub fn get_render_pipeline(&self, id: CachedPipelineId) -> &GpuRenderPipeline {
+        self.pipeline_container
+            .get_render_pipeline(id)
+            .expect("render pipeline mut have")
     }
 
     pub fn finish(self) -> CommandBuffer {
@@ -56,6 +66,7 @@ impl Pass {
         command_buffers: &mut Vec<CommandBuffer>,
         render_device: &RenderDevice,
         resource_table: &ResourceTable,
+        pipeline_container: &PipelineContainer,
     ) {
         let command_encoder = render_device.create_command_encoder(&CommandEncoderDescriptor {
             label: self.label.clone(),
@@ -65,6 +76,7 @@ impl Pass {
             render_device,
             command_encoder,
             resource_table,
+            pipeline_container,
         };
 
         for command in self.commands.iter() {
