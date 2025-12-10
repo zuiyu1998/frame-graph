@@ -13,6 +13,23 @@ impl<'a, 'b> RenderPassContext<'a, 'b> {
         }
     }
 
+    pub fn set_vertex_buffer(
+        &mut self,
+        slot: u32,
+        buffer_ref: &Ref<TransientBuffer, ResourceRead>,
+        offset: u64,
+        size: u64,
+    ) {
+        let buffer = self.pass_context.resource_table.get_resource(buffer_ref);
+        self.render_pass.get_render_pass_mut().set_vertex_buffer(
+            slot,
+            buffer
+                .resource
+                .get_wgpu_buffer()
+                .slice(offset..(offset + size)),
+        );
+    }
+
     pub fn set_index_buffer(
         &mut self,
         buffer_ref: &Ref<TransientBuffer, ResourceRead>,

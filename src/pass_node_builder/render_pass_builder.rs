@@ -33,6 +33,18 @@ impl<'a, 'b> RenderPassBuilder<'a, 'b> {
         self
     }
 
+    pub fn set_vertex_buffer(
+        &mut self,
+        slot: u32,
+        buffer_ref: &Ref<TransientBuffer, ResourceRead>,
+        offset: u64,
+        size: u64,
+    ) -> &mut Self {
+        self.render_pass
+            .set_vertex_buffer(slot, buffer_ref, offset, size);
+        self
+    }
+
     pub fn create_render_pass_builder(&mut self) -> &mut Self {
         self.finish();
 
