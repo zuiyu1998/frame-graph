@@ -1,3 +1,7 @@
+mod pass_node_builder;
+
+pub use pass_node_builder::*;
+
 use std::sync::Arc;
 use wgpu::CommandBuffer;
 

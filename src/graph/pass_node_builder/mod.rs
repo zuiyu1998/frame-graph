@@ -1,15 +1,16 @@
-mod render_pass_builder;
-mod pass_builder;
 mod parameter;
+mod pass_builder;
+mod render_pass_builder;
 
-pub use render_pass_builder::*;
-pub use pass_builder::*;
 pub use parameter::RenderPassExt;
+pub use pass_builder::*;
+pub use render_pass_builder::*;
 
-use super::{
-    FrameGraph, GraphRawResourceHandle, Handle, Pass, Ref, ResourceMaterial, ResourceRead,
-    ResourceWrite, TransientResource,
+use crate::{
+    GraphRawResourceHandle, Handle, Pass, Ref, ResourceRead, ResourceWrite, TransientResource,
 };
+
+use super::{FrameGraph, ResourceMaterial};
 
 pub struct PassNodeBuilder<'a> {
     pub(crate) graph: &'a mut FrameGraph,
