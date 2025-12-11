@@ -9,6 +9,7 @@ mod pipeline;
 mod bind_group_layout;
 mod bind_group;
 mod resource_macros;
+mod surface;
 
 pub use buffer::*;
 pub use command_encoder::*;
@@ -20,5 +21,6 @@ pub use render_pass::*;
 pub use pipeline::*;
 pub use bind_group_layout::*;
 pub use bind_group::*;
+pub use surface::*;
 
-pub use wgpu::CommandEncoder;
+pub use wgpu::{CommandEncoder, SurfaceError};

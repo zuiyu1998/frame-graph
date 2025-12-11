@@ -1,9 +1,9 @@
-use wgpu::{BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device};
+use wgpu::{BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device, SurfaceConfiguration};
 
 use super::{
     BindGroupDescriptor, BindGroupLayoutDescriptor, BindingResource, BufferDescriptor,
     CommandEncoderDescriptor, GpuBindGroup, GpuBindGroupLayout, GpuBindingResource, GpuBuffer,
-    GpuSampler, GpuTexture, GpuTextureView, SamplerDescriptor, TextureDescriptor,
+    GpuSampler, GpuSurface, GpuTexture, GpuTextureView, SamplerDescriptor, TextureDescriptor,
 };
 
 #[derive(Debug, Clone)]
@@ -12,6 +12,10 @@ pub struct RenderDevice {
 }
 
 impl RenderDevice {
+    pub fn configure_surface(&self, surface: &GpuSurface, config: &SurfaceConfiguration) {
+        surface.get_wgpu_surface().configure(&self.device, config);
+    }
+
     pub fn create_sampler(&self, desc: &SamplerDescriptor) -> GpuSampler {
         let sampler = self.device.create_sampler(&desc.get_wgpu_desc());
         GpuSampler::new(sampler)

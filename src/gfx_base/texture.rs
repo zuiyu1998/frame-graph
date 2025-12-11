@@ -1,9 +1,17 @@
 use wgpu::{
-    Extent3d, Texture as WgpuTexture, TextureDescriptor as WgpuTextureDescriptor, TextureDimension,
-    TextureFormat, TextureUsages,
+    Extent3d, SurfaceTexture as WgpuSurfaceTexture, Texture as WgpuTexture,
+    TextureDescriptor as WgpuTextureDescriptor, TextureDimension, TextureFormat, TextureUsages,
 };
 
 use super::{GpuTextureView, TextureViewDescriptor};
+
+pub struct GpuSurfaceTexture(WgpuSurfaceTexture);
+
+impl GpuSurfaceTexture {
+    pub(crate) fn new(value: WgpuSurfaceTexture) -> Self {
+        GpuSurfaceTexture(value)
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct GpuTexture(WgpuTexture);
