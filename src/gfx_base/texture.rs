@@ -11,6 +11,10 @@ impl GpuSurfaceTexture {
     pub(crate) fn new(value: WgpuSurfaceTexture) -> Self {
         GpuSurfaceTexture(value)
     }
+
+    pub fn present(self) {
+        self.0.present();
+    }
 }
 
 #[derive(Debug, Clone)]
