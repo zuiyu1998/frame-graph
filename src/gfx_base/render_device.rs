@@ -12,6 +12,10 @@ pub struct RenderDevice {
 }
 
 impl RenderDevice {
+    pub fn new(device: Device) -> Self {
+        Self { device }
+    }
+
     pub fn configure_surface(&self, surface: &GpuSurface, config: &SurfaceConfiguration) {
         surface.get_wgpu_surface().configure(&self.device, config);
     }

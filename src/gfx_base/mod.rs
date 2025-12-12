@@ -23,8 +23,6 @@ pub use surface::*;
 pub use texture::*;
 pub use texture_view::*;
 
-pub use wgpu::{CommandEncoder, SurfaceError};
-
 use wgpu::{Instance, SurfaceTargetUnsafe};
 
 use std::sync::Arc;
