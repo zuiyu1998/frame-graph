@@ -23,13 +23,26 @@ pub use surface::*;
 pub use texture::*;
 pub use texture_view::*;
 
-use wgpu::{Instance, SurfaceTargetUnsafe};
+use wgpu::{Instance, Queue, SurfaceTargetUnsafe};
 
 use std::sync::Arc;
+
+#[derive(Clone)]
+pub struct RenderQueue(pub Arc<Queue>);
+
+impl RenderQueue {
+    pub fn new(queue: Queue) -> Self {
+        Self(Arc::new(queue))
+    }
+}
 
 pub struct RenderInstance(pub Arc<Instance>);
 
 impl RenderInstance {
+    pub fn new(instance: Instance) -> Self {
+        Self(Arc::new(instance))
+    }
+
     // SAFETY: The window handles in ExtractedWindows will always be valid objects to create surfaces on
     pub fn create_surface_unsafe(&self, target: SurfaceTargetUnsafe) -> GpuSurface {
         let surface = unsafe {
