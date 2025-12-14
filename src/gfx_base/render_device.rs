@@ -1,5 +1,7 @@
 use wgpu::{BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device, SurfaceConfiguration};
 
+use crate::gfx_base::{GpuPipelineLayout, PipelineLayoutDescriptor};
+
 use super::{
     BindGroupDescriptor, BindGroupLayoutDescriptor, BindingResource, BufferDescriptor,
     CommandEncoderDescriptor, GpuBindGroup, GpuBindGroupLayout, GpuBindingResource, GpuBuffer,
@@ -18,6 +20,22 @@ impl RenderDevice {
 
     pub fn configure_surface(&self, surface: &GpuSurface, config: &SurfaceConfiguration) {
         surface.get_wgpu_surface().configure(&self.device, config);
+    }
+
+    pub fn create_pipeline_layout(&self, desc: &PipelineLayoutDescriptor) -> GpuPipelineLayout {
+        let bind_group_layouts = desc
+            .bind_group_layouts
+            .iter()
+            .map(|bind_group_layout| bind_group_layout.get_wgpu_bind_group_layout())
+            .collect::<Vec<_>>();
+
+        GpuPipelineLayout::new(self.device.create_pipeline_layout(
+            &wgpu::PipelineLayoutDescriptor {
+                label: desc.label.as_deref(),
+                bind_group_layouts: &bind_group_layouts,
+                push_constant_ranges: &desc.push_constant_ranges,
+            },
+        ))
     }
 
     pub fn create_sampler(&self, desc: &SamplerDescriptor) -> GpuSampler {

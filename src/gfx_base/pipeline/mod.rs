@@ -1,19 +1,8 @@
 mod container;
+mod render;
 
 pub use container::*;
-
-#[derive(Clone, Debug)]
-pub struct GpuRenderPipeline(wgpu::RenderPipeline);
-
-impl GpuRenderPipeline {
-    pub fn wgpu(&self) -> &wgpu::RenderPipeline {
-        &self.0
-    }
-
-    pub fn new(pipeline: wgpu::RenderPipeline) -> Self {
-        GpuRenderPipeline(pipeline)
-    }
-}
+pub use render::*;
 
 #[derive(Clone, Debug)]
 pub struct GpuComputePipeline(wgpu::ComputePipeline);

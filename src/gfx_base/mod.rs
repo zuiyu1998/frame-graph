@@ -10,12 +10,14 @@ mod sampler;
 mod surface;
 mod texture;
 mod texture_view;
+mod pipeline_layout;
 
 pub use bind_group::*;
 pub use bind_group_layout::*;
 pub use buffer::*;
 pub use command_encoder::*;
 pub use pipeline::*;
+pub use pipeline_layout::*;
 pub use render_device::*;
 pub use render_pass::*;
 pub use sampler::*;
