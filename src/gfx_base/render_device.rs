@@ -1,11 +1,17 @@
-use wgpu::{BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device, SurfaceConfiguration};
+use wgpu::{
+    BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device, PipelineCompilationOptions,
+    ShaderModuleDescriptor, SurfaceConfiguration,
+};
 
-use crate::gfx_base::{GpuPipelineLayout, PipelineLayoutDescriptor};
+use crate::gfx_base::{
+    GpuPipelineLayout, GpuRenderPipeline, GpuShaderModule, PipelineLayoutDescriptor,
+};
 
 use super::{
     BindGroupDescriptor, BindGroupLayoutDescriptor, BindingResource, BufferDescriptor,
     CommandEncoderDescriptor, GpuBindGroup, GpuBindGroupLayout, GpuBindingResource, GpuBuffer,
-    GpuSampler, GpuSurface, GpuTexture, GpuTextureView, SamplerDescriptor, TextureDescriptor,
+    GpuSampler, GpuSurface, GpuTexture, GpuTextureView, RenderPipelineDescriptor,
+    SamplerDescriptor, TextureDescriptor,
 };
 
 #[derive(Debug, Clone)]
@@ -20,6 +26,47 @@ impl RenderDevice {
 
     pub fn configure_surface(&self, surface: &GpuSurface, config: &SurfaceConfiguration) {
         surface.get_wgpu_surface().configure(&self.device, config);
+    }
+
+    pub fn create_render_pipeline(&self, desc: RenderPipelineDescriptor) -> GpuRenderPipeline {
+        let buffers = desc
+            .vertex
+            .buffers
+            .iter()
+            .map(|layout| layout.get_wgpu_vertex_buffer_layout())
+            .collect::<Vec<_>>();
+
+        let vertex = wgpu::VertexState {
+            module: desc.vertex.module.get_wgpu_shader_module(),
+            entry_point: desc.vertex.entry_point.as_deref(),
+            compilation_options: PipelineCompilationOptions::default(),
+            buffers: &buffers,
+        };
+
+        let fragment = desc.fragment.as_ref().map(|fragment| wgpu::FragmentState {
+            module: desc.vertex.module.get_wgpu_shader_module(),
+            entry_point: desc.vertex.entry_point.as_deref(),
+            compilation_options: PipelineCompilationOptions::default(),
+            targets: &fragment.targets,
+        });
+
+        GpuRenderPipeline::new(self.device.create_render_pipeline(
+            &wgpu::RenderPipelineDescriptor {
+                label: desc.label.as_deref(),
+                layout: Some(desc.layout.get_wgpu_pipeline_layout()),
+                vertex,
+                primitive: desc.primitive,
+                depth_stencil: desc.depth_stencil,
+                multisample: desc.multisample,
+                fragment,
+                multiview: None,
+                cache: None,
+            },
+        ))
+    }
+
+    pub fn create_shader_module(&self, desc: ShaderModuleDescriptor) -> GpuShaderModule {
+        GpuShaderModule::new(self.device.create_shader_module(desc))
     }
 
     pub fn create_pipeline_layout(&self, desc: &PipelineLayoutDescriptor) -> GpuPipelineLayout {

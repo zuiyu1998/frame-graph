@@ -11,6 +11,7 @@ mod surface;
 mod texture;
 mod texture_view;
 mod pipeline_layout;
+mod shader_module;
 
 pub use bind_group::*;
 pub use bind_group_layout::*;
@@ -24,6 +25,7 @@ pub use sampler::*;
 pub use surface::*;
 pub use texture::*;
 pub use texture_view::*;
+pub use shader_module::*;
 
 use wgpu::{Instance, Queue, SurfaceTargetUnsafe};
 
