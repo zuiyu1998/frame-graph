@@ -20,3 +20,16 @@ pub struct PipelineLayoutDescriptor {
     pub bind_group_layouts: Vec<GpuBindGroupLayout>,
     pub push_constant_ranges: Vec<PushConstantRange>,
 }
+
+#[derive(Debug, Clone)]
+pub struct PipelineLayout(GpuPipelineLayout);
+
+impl PipelineLayout {
+    pub fn new(value: GpuPipelineLayout) -> Self {
+        PipelineLayout(value)
+    }
+
+    pub fn value(&self) -> &GpuPipelineLayout {
+        &self.0
+    }
+}

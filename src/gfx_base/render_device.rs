@@ -57,7 +57,7 @@ impl RenderDevice {
                     layout: desc
                         .layout
                         .as_ref()
-                        .map(|layout| layout.get_wgpu_pipeline_layout()),
+                        .map(|layout| layout.value().get_wgpu_pipeline_layout()),
                     vertex,
                     primitive: desc.primitive,
                     depth_stencil: desc.depth_stencil,

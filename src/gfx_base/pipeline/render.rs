@@ -3,7 +3,7 @@ use wgpu::{
     VertexAttribute, VertexStepMode,
 };
 
-use crate::gfx_base::{GpuPipelineLayout, GpuShaderModule};
+use crate::gfx_base::{GpuShaderModule, PipelineLayout};
 
 #[derive(Debug, Clone)]
 pub struct VertexBufferLayout {
@@ -49,7 +49,7 @@ impl GpuRenderPipeline {
 
 pub struct RenderPipelineDescriptor {
     pub label: Option<String>,
-    pub layout: Option<GpuPipelineLayout>,
+    pub layout: Option<PipelineLayout>,
     pub vertex: VertexState,
     pub primitive: PrimitiveState,
     pub depth_stencil: Option<DepthStencilState>,
