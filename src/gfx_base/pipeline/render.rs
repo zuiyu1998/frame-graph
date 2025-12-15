@@ -1,6 +1,5 @@
 use wgpu::{
-    BufferAddress, ColorTargetState, DepthStencilState, MultisampleState, PrimitiveState,
-    VertexAttribute, VertexStepMode,
+    BufferAddress, ColorTargetState, DepthStencilState, MultisampleState, PipelineCompilationOptions, PrimitiveState, VertexAttribute, VertexStepMode
 };
 
 use crate::gfx_base::{GpuShaderModule, PipelineLayout};
@@ -22,16 +21,18 @@ impl VertexBufferLayout {
     }
 }
 
-pub struct VertexState {
+pub struct VertexState<'a> {
     pub module: GpuShaderModule,
     pub entry_point: Option<String>,
     pub buffers: Vec<VertexBufferLayout>,
+    pub compilation_options: PipelineCompilationOptions<'a>,
 }
 
-pub struct FragmentState {
+pub struct FragmentState<'a> {
     pub module: GpuShaderModule,
     pub entry_point: Option<String>,
     pub targets: Vec<Option<ColorTargetState>>,
+    pub compilation_options: PipelineCompilationOptions<'a>,
 }
 
 #[derive(Clone, Debug)]
@@ -47,12 +48,12 @@ impl GpuRenderPipeline {
     }
 }
 
-pub struct RenderPipelineDescriptor {
+pub struct RenderPipelineDescriptor<'a> {
     pub label: Option<String>,
     pub layout: Option<PipelineLayout>,
-    pub vertex: VertexState,
+    pub vertex: VertexState<'a>,
     pub primitive: PrimitiveState,
     pub depth_stencil: Option<DepthStencilState>,
     pub multisample: MultisampleState,
-    pub fragment: Option<FragmentState>,
+    pub fragment: Option<FragmentState<'a>>,
 }

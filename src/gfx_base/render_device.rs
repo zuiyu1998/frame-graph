@@ -1,6 +1,6 @@
 use wgpu::{
-    BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device, PipelineCompilationOptions,
-    ShaderModuleDescriptor, SurfaceConfiguration,
+    BindGroupEntry as WgpuBindGroupEntry, CommandEncoder, Device, ShaderModuleDescriptor,
+    SurfaceConfiguration,
 };
 
 use crate::gfx_base::{
@@ -39,14 +39,14 @@ impl RenderDevice {
         let vertex = wgpu::VertexState {
             module: desc.vertex.module.get_wgpu_shader_module(),
             entry_point: desc.vertex.entry_point.as_deref(),
-            compilation_options: PipelineCompilationOptions::default(),
+            compilation_options: desc.vertex.compilation_options,
             buffers: &buffers,
         };
 
         let fragment = desc.fragment.as_ref().map(|fragment| wgpu::FragmentState {
-            module: desc.vertex.module.get_wgpu_shader_module(),
-            entry_point: desc.vertex.entry_point.as_deref(),
-            compilation_options: PipelineCompilationOptions::default(),
+            module: fragment.module.get_wgpu_shader_module(),
+            entry_point: fragment.entry_point.as_deref(),
+            compilation_options: fragment.compilation_options.clone(),
             targets: &fragment.targets,
         });
 
