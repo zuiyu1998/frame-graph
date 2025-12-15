@@ -50,19 +50,23 @@ impl RenderDevice {
             targets: &fragment.targets,
         });
 
-        GpuRenderPipeline::new(self.device.create_render_pipeline(
-            &wgpu::RenderPipelineDescriptor {
-                label: desc.label.as_deref(),
-                layout: Some(desc.layout.get_wgpu_pipeline_layout()),
-                vertex,
-                primitive: desc.primitive,
-                depth_stencil: desc.depth_stencil,
-                multisample: desc.multisample,
-                fragment,
-                multiview: None,
-                cache: None,
-            },
-        ))
+        GpuRenderPipeline::new(
+            self.device
+                .create_render_pipeline(&wgpu::RenderPipelineDescriptor {
+                    label: desc.label.as_deref(),
+                    layout: desc
+                        .layout
+                        .as_ref()
+                        .map(|layout| layout.get_wgpu_pipeline_layout()),
+                    vertex,
+                    primitive: desc.primitive,
+                    depth_stencil: desc.depth_stencil,
+                    multisample: desc.multisample,
+                    fragment,
+                    multiview: None,
+                    cache: None,
+                }),
+        )
     }
 
     pub fn create_shader_module(&self, desc: ShaderModuleDescriptor) -> GpuShaderModule {

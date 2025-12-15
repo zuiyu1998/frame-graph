@@ -49,7 +49,7 @@ impl GpuRenderPipeline {
 
 pub struct RenderPipelineDescriptor {
     pub label: Option<String>,
-    pub layout: GpuPipelineLayout,
+    pub layout: Option<GpuPipelineLayout>,
     pub vertex: VertexState,
     pub primitive: PrimitiveState,
     pub depth_stencil: Option<DepthStencilState>,
