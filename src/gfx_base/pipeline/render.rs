@@ -5,6 +5,7 @@ use wgpu::{
 
 use crate::gfx_base::{GpuPipelineLayout, GpuShaderModule};
 
+#[derive(Debug, Clone)]
 pub struct VertexBufferLayout {
     pub array_stride: BufferAddress,
     pub step_mode: VertexStepMode,
